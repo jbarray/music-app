@@ -2,7 +2,9 @@
   <div id="app">
     <m-header></m-header>
     <tab></tab>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -19,7 +21,12 @@ export default {
 </script>
 
 <style>
+  *{
+    margin:0;
+    padding:0;
+  }
 #app {
   background-color: #2c3e50;
+  margin:0;
 }
 </style>
