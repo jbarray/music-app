@@ -1,16 +1,37 @@
 <template>
   <div class="recommend" ref="recommend">
-   <div class="recommend-content">
-     <div v-if="recommends.length" class="slider-wrapper">
-       <slider>
-         <div v-for="item in recommends">
-           <a :href="item.linkUrl">
-             <img :src="item.picUrl">
-           </a>
+    <scroll ref="scroll" class="recommend-content" :data="discList">
+      <div>
+       <div class="recommend-content">
+         <div v-if="recommends.length" class="slider-wrapper">
+           <slider>
+             <div v-for="item in recommends">
+               <a :href="item.linkUrl">
+                 <img :src="item.picUrl" @load="loadImage">
+               </a>
+             </div>
+           </slider>
          </div>
-       </slider>
-     </div>
-   </div>
+         <div class="recommend-list">
+           <h1 class="list-title">热门推荐</h1>
+           <ul>
+             <li @click="selectItem(item)" v-for="item in discList" class="item">
+               <div class="icon">
+                 <img :src="item.imgurl" width="60" height="60">
+               </div>
+               <div class="text">
+                 <h2 class="name">{{item.creator.name}}</h2>
+                 <p class="desc" v-html="item.dissname"></p>
+               </div>
+             </li>
+           </ul>
+         </div>
+         <!--<div class="loading-container" v-show="!discList.length">-->
+           <!--<loading></loading>-->
+         <!--</div>-->
+       </div>
+      </div>
+    </scroll>
   </div>
 </template>
 
@@ -19,15 +40,18 @@
   import {ERR_OK} from '../../api/config'
   import slider from '../../../src/base/slider/slider.vue'
   import {getDiscList} from '../../api/recommend'
+  import Scroll from '../../../src/base/scroll/scroll'
 
   export default {
     data(){
       return {
         recommends:[],
+        discList: []
       }
     },
     components:{
       slider,
+      Scroll,
     },
     created() {
       this._getRecommend()
@@ -45,10 +69,16 @@
         getDiscList().then((res) => {
           if (res.code === ERR_OK) {
             this.discList = res.data.list
-//            console.log( res.data);
+            console.log(this.discList);
           }
         })
       },
+      loadImage() {
+        if(!this.checkLoaded){
+          this.$refs.slider.refresh()
+          this.checkLoaded=true
+        }
+      }
     }
   }
 </script>
@@ -94,9 +124,9 @@
             font-size: $font-size-medium
             .name
               margin-bottom: 10px
-              color: $color-text
+              color: black
             .desc
-              color: $color-text-d
+              color: black
       .loading-container
         position: absolute
         width: 100%
