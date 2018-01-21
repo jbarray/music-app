@@ -21,13 +21,4 @@ export default {
 </script>
 
 <style>
-  *{
-    margin:0;
-    padding:0;
-  }
-#app {
-  background-color: #2c3e50;
-  margin:0;
-  overflow: hidden;
-}
 </style>

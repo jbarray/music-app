@@ -76,8 +76,8 @@
       loadImage() {
         if(!this.checkLoaded){
           this.$refs.slider.refresh()
-          this.checkLoaded=true
         }
+        this.checkLoaded=true;
       }
     }
   }
