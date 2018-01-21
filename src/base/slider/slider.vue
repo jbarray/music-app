@@ -1,3 +1,4 @@
+<script src="../../../build/webpack.dev.conf.js"></script>
 <script src="../../main.js"></script>
 <script src="../../common/js/dom.js"></script>
 <template>

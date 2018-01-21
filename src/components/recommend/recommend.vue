@@ -18,6 +18,7 @@
   import {getRecommend} from '../../api/recommend'
   import {ERR_OK} from '../../api/config'
   import slider from '../../../src/base/slider/slider.vue'
+  import {getDiscList} from '../../api/recommend'
 
   export default {
     data(){
@@ -30,6 +31,7 @@
     },
     created() {
       this._getRecommend()
+       this. _getDiscList()
     },
     methods: {
       _getRecommend() {
@@ -38,7 +40,15 @@
             this.recommends=res.data.slider
           }
         })
-      }
+      },
+      _getDiscList() {
+        getDiscList().then((res) => {
+          if (res.code === ERR_OK) {
+            this.discList = res.data.list
+//            console.log( res.data);
+          }
+        })
+      },
     }
   }
 </script>
