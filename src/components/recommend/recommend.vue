@@ -3,6 +3,7 @@
     <scroll ref="scroll" class="recommend-content" :data="discList">
       <div>
        <div class="recommend-content">
+         <!--轮播图-->
          <div v-if="recommends.length" class="slider-wrapper">
            <slider>
              <div v-for="item in recommends">
@@ -12,12 +13,13 @@
              </div>
            </slider>
          </div>
+         <!--推荐内容-->
          <div class="recommend-list">
            <h1 class="list-title">热门推荐</h1>
            <ul>
              <li @click="selectItem(item)" v-for="item in discList" class="item">
                <div class="icon">
-                 <img :src="item.imgurl" width="60" height="60">
+                 <img v-lazy="item.imgurl" width="60" height="60">
                </div>
                <div class="text">
                  <h2 class="name">{{item.creator.name}}</h2>
@@ -26,9 +28,10 @@
              </li>
            </ul>
          </div>
-         <!--<div class="loading-container" v-show="!discList.length">-->
-           <!--<loading></loading>-->
-         <!--</div>-->
+         <!--页面没有出现内容的时候,会出现一个正在加载的图标-->
+         <div class="loading-container" v-show="!discList.length">
+           <loading></loading>
+         </div>
        </div>
       </div>
     </scroll>
@@ -41,6 +44,7 @@
   import slider from '../../../src/base/slider/slider.vue'
   import {getDiscList} from '../../api/recommend'
   import Scroll from '../../../src/base/scroll/scroll'
+  import loading from '../../../src/base/loading/loading.vue'
 
   export default {
     data(){
@@ -52,6 +56,7 @@
     components:{
       slider,
       Scroll,
+      loading
     },
     created() {
       this._getRecommend()
@@ -75,10 +80,16 @@
       },
       loadImage() {
         if(!this.checkLoaded){
-          this.$refs.slider.refresh()
+          this.$refs.scroll.refresh()
         }
         this.checkLoaded=true;
-      }
+      },
+      selectItem(item) {
+        this.$router.push({
+          path: `/recommend/${item.dissid}`
+        })
+//        this.setDisc(item)
+      },
     }
   }
 </script>
@@ -124,9 +135,9 @@
             font-size: $font-size-medium
             .name
               margin-bottom: 10px
-              color: black
+              color:  $color-text
             .desc
-              color: black
+              color:  $color-text-d
       .loading-container
         position: absolute
         width: 100%
