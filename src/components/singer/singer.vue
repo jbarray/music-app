@@ -1,21 +1,25 @@
 <template>
   <div class="singer" ref="singer">
-
+    <listview :data="singers"></listview>
   </div>
 </template>
 
 <script>
 import {getSingerList} from '../../api/singer'
 import Singer from '../../common/js/singer'
+import listview from '../../base/listview/listview.vue'
 
 const HOT_NAME='推荐'
 const HOT_SINGER_LEN=10
   export default {
     data() {
       return {
-        singerList:[],
+        singers:[],
         map:[]
       }
+    },
+    components:{
+      listview
     },
     created() {
       this._getSingerList();
@@ -25,8 +29,7 @@ const HOT_SINGER_LEN=10
         getSingerList().then((res) => {
           if(res.code===0) {
  //           console.log(this.singerLsit);
-            this.singerLsit=this._nowListMap(res.data.list);
-            console.log(this.singerLsit);
+            this.singers=this._nowListMap(res.data.list);
           }
         })
       },
