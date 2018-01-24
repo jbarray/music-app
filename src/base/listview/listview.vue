@@ -11,6 +11,12 @@
        </ul>
      </li>
    </ul>
+    <div class="list-shortcut">
+      <ul>
+        <li class="item" v-for="(item,index) in shortCutList">{{item}}
+        </li>
+      </ul>
+    </div>
   </scroll>
 </template>
 
@@ -25,6 +31,14 @@
     },
     components:{
       scroll
+    },
+    computed:{
+//      获取右边导航的内容(字母)
+      shortCutList() {
+        return this.data.map((group) => {
+          return group.title.substr(0,1)
+        })
+      },
     }
   }
 
