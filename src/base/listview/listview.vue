@@ -1,7 +1,7 @@
 <template>
-  <scroll class="listview">
+  <scroll class="listview" ref="listview">
    <ul>
-     <li v-for="group in data" class="list-group">
+     <li v-for="group in data" class="list-group" ref="listGroup">
        <ul>
          <h2 class="list-group-title">{{group.title}}</h2>
          <li v-for="item in group.items" class="list-group-item">
@@ -13,7 +13,7 @@
    </ul>
     <div class="list-shortcut">
       <ul>
-        <li class="item" v-for="(item,index) in shortCutList">{{item}}
+        <li class="item" v-for="(item,index) in shortCutList" :data-index="index" @touchstart.stop.prevent="onShortcutTouchStart">{{item}}
         </li>
       </ul>
     </div>
@@ -22,6 +22,7 @@
 
 <script type="text/ecmascript-6">
   import scroll from '../scroll/scroll.vue'
+  import {getData}from '../../common/js/dom'
   export default {
     props:{
       data:{
@@ -39,6 +40,14 @@
           return group.title.substr(0,1)
         })
       },
+    },
+    methods:{
+//      首次点击右边导航,左边内容跳转至对应模块
+      onShortcutTouchStart(e) {
+        let anchorIndex = getData(e.target, 'index')
+        console.log(anchorIndex);
+        this.$refs.listview.scrollToElement(this.$refs.listGroup[anchorIndex],0)
+      }
     }
   }
 
