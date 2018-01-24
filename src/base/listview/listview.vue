@@ -1,5 +1,10 @@
 <template>
-  <scroll class="listview" ref="listview">
+  <scroll @scroll="scroll"
+          class="listview"
+          ref="listview"
+          :data="data"
+          :probe-type="probeType"
+          :listen-scroll="listenScroll">
    <ul>
      <li v-for="group in data" class="list-group" ref="listGroup">
        <ul>
@@ -13,7 +18,11 @@
    </ul>
     <div class="list-shortcut">
       <ul>
-        <li class="item" v-for="(item,index) in shortCutList" :data-index="index" @touchstart.stop.prevent="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">{{item}}
+        <li class="item" v-for="(item,index) in shortCutList"
+            :data-index="index"
+            @touchstart.stop.prevent="onShortcutTouchStart"
+            @touchmove.stop.prevent="onShortcutTouchMove"
+        :class="{'current':currentIndex==index}">{{item}}
         </li>
       </ul>
     </div>
@@ -24,9 +33,20 @@
   import scroll from '../scroll/scroll.vue'
   import {getData}from '../../common/js/dom'
   export default {
+    data(){
+      return {
+//        滚动条移动的位置
+        scrollY:-1,
+//        当前需要哪一个模块高亮
+        currentIndex:0,
+        probeType:3
+      }
+    },
     created() {
 //      建立touch变量仅限于在created中使用
-      this.touch={}
+        this.touch={}
+        this.listenScroll = true
+        this.listHeight=[]
     },
     props:{
       data:{
@@ -72,6 +92,46 @@
       },
       _scrollTo(index) {
         this.$refs.listview.scrollToElement(this.$refs.listGroup[index],0)
+      },
+//      获取当前位置的y方向高度
+      scroll(pos) {
+        this.scrollY = pos.y
+      },
+//      获得左侧内容每一个模块的clientheight,得到数组
+      _calculateHeight() {
+        this.listHeight=[]
+        const list=this.$refs.listGroup
+        let height=0
+//        第一个模块的clientHeight为0
+        this.listHeight.push(height);
+        for(let i=0;i<list.length;i++){
+          height += list[i].clientHeight
+          this.listHeight.push(height);
+        }
+      }
+    },
+    watch:{
+//      data加载完成20秒后,进行此操作,防止手机出现兼容性问题
+      data(){
+        setTimeout(() => {
+          this._calculateHeight()
+        },20)
+      },
+      scrollY(newY) {
+//        newY是滚动条滚动的距离,向下滚动为负
+        if(newY>0){
+          this.currentIndex=0
+          return
+        }
+        for(let i = 0;i < this.listHeight.length-1;i++) {
+          let height1 = this.listHeight[i]
+          let height2 = this.listHeight[i+1]
+          if(-newY >= height1 && -newY < height2) {
+            this.currentIndex=i
+            return
+          }
+          this.currentIndex = this.listHeight.length - 2
+        }
       }
     }
   }
