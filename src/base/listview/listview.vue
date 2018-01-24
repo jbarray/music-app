@@ -16,6 +16,7 @@
        </ul>
      </li>
    </ul>
+    <!--右侧导航栏-->
     <div class="list-shortcut">
       <ul>
         <li class="item" v-for="(item,index) in shortCutList"
@@ -26,12 +27,22 @@
         </li>
       </ul>
     </div>
+    <!--顶部条-->
+    <div class="list-fixed" ref="fixed" v-show="fixedTitle">
+      <div class="fixed-title">{{fixedTitle}} </div>
+    </div>
+    <div v-show="!data.length" class="loading-container">
+      <loading></loading>
+    </div>
   </scroll>
 </template>
 
 <script type="text/ecmascript-6">
   import scroll from '../scroll/scroll.vue'
   import {getData}from '../../common/js/dom'
+  import loading from '../../base/loading/loading.vue'
+
+  const TITLE_HEIGHT = 30
   export default {
     data(){
       return {
@@ -39,7 +50,7 @@
         scrollY:-1,
 //        当前需要哪一个模块高亮
         currentIndex:0,
-        probeType:3
+        diff: -1
       }
     },
     created() {
@@ -47,6 +58,7 @@
         this.touch={}
         this.listenScroll = true
         this.listHeight=[]
+        this.probeType = 3
     },
     props:{
       data:{
@@ -55,7 +67,8 @@
       }
     },
     components:{
-      scroll
+      scroll,
+      loading
     },
     computed:{
 //      获取右边导航的内容(字母)
@@ -64,6 +77,12 @@
           return group.title.substr(0,1)
         })
       },
+      fixedTitle() {
+        if (this.scrollY > 0) {
+          return ''
+        }
+        return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
+      }
     },
     methods:{
 //      首次点击右边导航,左边内容跳转至对应模块
@@ -91,6 +110,7 @@
         this._scrollTo(anchorIndex);
       },
       _scrollTo(index) {
+        this.scrollY=-this.listHeight[index]
         this.$refs.listview.scrollToElement(this.$refs.listGroup[index],0)
       },
 //      获取当前位置的y方向高度
@@ -128,10 +148,19 @@
           let height2 = this.listHeight[i+1]
           if(-newY >= height1 && -newY < height2) {
             this.currentIndex=i
+            this.diff = height2 + newY
             return
           }
           this.currentIndex = this.listHeight.length - 2
         }
+      },
+      diff(newVal) {
+        let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0
+        if (this.fixedTop === fixedTop) {
+          return
+        }
+        this.fixedTop = fixedTop
+        this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`
       }
     }
   }
