@@ -9,7 +9,7 @@
      <li v-for="group in data" class="list-group" ref="listGroup">
        <ul>
          <h2 class="list-group-title">{{group.title}}</h2>
-         <li v-for="item in group.items" class="list-group-item">
+         <li v-for="item in group.items" @click="selectItem(item)" class="list-group-item">
            <img :src="item.avatar" class="avatar">
            <span class="name">{{item.name}}</span>
          </li>
@@ -85,6 +85,10 @@
       }
     },
     methods:{
+//      告诉父组件,点击某个歌手的事件已经启动
+      selectItem(item){
+        this.$emit('select',item)
+      },
 //      首次点击右边导航,左边内容跳转至对应模块
       onShortcutTouchStart(e) {
 //        获得滑动时起始位置的index

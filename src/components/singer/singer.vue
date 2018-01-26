@@ -1,6 +1,7 @@
 <template>
   <div class="singer" ref="singer">
-    <listview :data="singers"></listview>
+    <listview @select="selectSinger" :data="singers"></listview>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -8,6 +9,8 @@
 import {getSingerList} from '../../api/singer'
 import Singer from '../../common/js/singer'
 import listview from '../../base/listview/listview.vue'
+//mapMutations语法糖是对于引入vuex操作方法的封装
+import {mapMutations} from 'vuex'
 
 const HOT_NAME='推荐'
 const HOT_SINGER_LEN=10
@@ -81,6 +84,17 @@ const HOT_SINGER_LEN=10
         })
         return hot.concat(ret)
       },
+      //      点击某个歌手时
+      selectSinger(singer) {
+        this.$router.push({
+          path:`/singer/${singer.id}`
+        })
+        this.setSinger(singer)
+      },
+//      引入mapMutations
+      ...mapMutations({
+        setSinger: 'SET_SINGER'
+      })
     }
   }
 
