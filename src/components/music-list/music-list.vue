@@ -97,11 +97,13 @@
           this.$refs.bgImage.style.zIndex=10
           this.$refs.bgImage.style.paddingTop=0
           this.$refs.bgImage.style.height=`${RESERVED_HEIGHT}px`
+          this.$refs.playBtn.style.display= 'none'
         }
         //小于最顶端的时候,恢复最开始的状态
         else{
           this.$refs.bgImage.style.paddingTop='70%'
           this.$refs.bgImage.style.height=0
+          this.$refs.playBtn.style.display=''
         }
         this.$refs.bgImage.style['transform']=`scale(${scale})`
         this.$refs.bgImage.style['webkitTransform']=`scale(${scale})`
