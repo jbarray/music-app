@@ -14,7 +14,7 @@
     <scroll :data="songs" @scroll="scroll" :listen-scroll="listenScroll"
              :probe-type="probeType" class="list" ref="list">
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list :songs="songs" @select="select"></song-list>
       </div>
     </scroll>
   </div>
@@ -23,6 +23,7 @@
 <script type="text/ecmascript-6">
   import scroll from '../../base/scroll/scroll'
   import songList from '../../base/song-list/song-list.vue'
+  import {mapActions} from 'vuex'
 
   const RESERVED_HEIGHT = 40
   export default {
@@ -63,7 +64,17 @@
       //4.向下滑动的时候,图片有高斯模糊的效果
       scroll(pos) {
         this.scrollY=pos.y
-      }
+      },
+      //引入vuex
+      select(item,index) {
+        this.selectPlay({
+          list:this.songs,
+          index
+        })
+      },
+      ...mapActions([
+        'selectPlay'
+      ])
     },
     mounted(){
       this.minHeight=this.$refs.bgImage.clientHeight
