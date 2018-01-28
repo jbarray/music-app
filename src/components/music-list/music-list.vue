@@ -10,18 +10,18 @@
       </div>
       <div class="filter" ref="filter"></div>
     </div>
-    <div class="bg-layer" ref="layer"></div>
-    <!--<scroll :data="songs" @scroll="scroll"-->
-            <!--:listen-scroll="listenScroll" :probe-type="probeType" class="list" ref="list">-->
-      <!--<div class="song-list-wrapper">-->
-        <!--<song-list :songs="songs" ></song-list>-->
-      <!--</div>-->
-    <!--</scroll>-->
+    <!--<div class="bg-layer" ref="layer"></div>-->
+    <scroll>
+      <div class="song-list-wrapper">
+        <song-list :songs="songs"></song-list>
+      </div>
+    </scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Scroll from '../../base/scroll/scroll'
+  import scroll from '../../base/scroll/scroll'
+  import songList from '../../base/song-list/song-list.vue'
 
   export default {
     props: {
@@ -42,6 +42,10 @@
       bgstyle() {
         return `backgroundImage:url(${this.bgImage})`
       }
+    },
+    components:{
+      songList,
+      scroll
     }
   }
 </script>

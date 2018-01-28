@@ -28,8 +28,8 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "~common/stylus/variable"
-  @import "~common/stylus/mixin"
+  @import "../../common/stylus/variable"
+  @import "../../common/stylus/mixin"
 
   .song-list
     .item
@@ -37,6 +37,7 @@
       align-items: center
       box-sizing: border-box
       height: 64px
+      padding-left 30px
       font-size: $font-size-medium
       .rank
         flex: 0 0 25px
@@ -48,12 +49,6 @@
           width: 25px
           height: 24px
           background-size: 25px 24px
-          &.icon0
-            bg-image('first')
-          &.icon1
-            bg-image('second')
-          &.icon2
-            bg-image('third')
         .text
           color: $color-theme
           font-size: $font-size-large
