@@ -24,6 +24,7 @@
   import scroll from '../../base/scroll/scroll'
   import songList from '../../base/song-list/song-list.vue'
 
+  const RESERVED_HEIGHT = 40
   export default {
     data() {
       return {
@@ -56,18 +57,55 @@
     methods:{
       //向下滑动歌曲列表的时候,新建一个html:layer,随时监听scroll在y轴上滚动的距离
 //      scroll向上的距离=lazy的改变距离
+      //修整:1.滑一会后,图片再次出现.让lazy最后固定高度.最大值为图片clientHeight-顶部预留高度
+      //2.歌单内容从最顶部文字上划过.一旦滑动到最顶端,将图片突出来,z-index设置,并且高度设为预留高度
+      //3.向上滑动的时候,希望图片有放大的功能.利用scale
+      //4.向下滑动的时候,图片有高斯模糊的效果
       scroll(pos) {
         this.scrollY=pos.y
       }
     },
     mounted(){
+      this.minHeight=this.$refs.bgImage.clientHeight
+      this.minTransalteY=-this.minHeight + RESERVED_HEIGHT
       this.$refs.list.$el.style.top=`${this.$refs.bgImage.clientHeight}px`
     },
     watch: {
       scrollY(newY) {
-        this.$refs.layer.style['transform']=`translate3d(0,${newY}px,0)`
-        this.$refs.layer.style['webkitTransform']=`translate3d(0,${newY}px,0)`
-      }
+        this.$refs.bgImage.style.zIndex=0
+        let transtlate = Math.max(this.minTransalteY,newY)
+        let scale=1
+        //高斯模糊效果
+        let blur=0
+        const percent = Math.abs(newY/this.minHeight)
+        //向下拉的时候 图片进行变化
+        if(newY > 0) {
+          scale= 1 + percent
+          this.$refs.bgImage.style.zIndex=10
+        }
+        //向上拉的时候 filter模糊
+        else{
+          blur=Math.min(20*percent,20)
+        }
+        //filter进行模糊
+        this.$refs.filter.style['backdrop-filter']=`blur(${blur}px)`
+        this.$refs.filter.style['webkitBackdrop-filter']=`blur(${blur}px)`
+        this.$refs.layer.style['transform']=`translate3d(0,${transtlate}px,0)`
+        this.$refs.layer.style['webkitTransform']=`translate3d(0,${transtlate}px,0)`
+        //(scroll的高度为负数) 一旦高度大于最顶端的时候
+        if(newY < this.minTransalteY) {
+          this.$refs.bgImage.style.zIndex=10
+          this.$refs.bgImage.style.paddingTop=0
+          this.$refs.bgImage.style.height=`${RESERVED_HEIGHT}px`
+        }
+        //小于最顶端的时候,恢复最开始的状态
+        else{
+          this.$refs.bgImage.style.paddingTop='70%'
+          this.$refs.bgImage.style.height=0
+        }
+        this.$refs.bgImage.style['transform']=`scale(${scale})`
+        this.$refs.bgImage.style['webkitTransform']=`scale(${scale})`
+      },
     },
     components:{
       songList,
