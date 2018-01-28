@@ -1,7 +1,7 @@
 <template>
   <div class="music-list">
     <h1 class="title" v-html="title"></h1>
-    <div class="bg-image" :style="bgstyle">
+    <div class="bg-image" :style="bgstyle" ref="bgImage">
       <div class="play-wrapper">
         <div ref="playBtn" v-show="songs.length>0" class="play">
           <i class="icon-play"></i>
@@ -10,8 +10,9 @@
       </div>
       <div class="filter" ref="filter"></div>
     </div>
-    <!--<div class="bg-layer" ref="layer"></div>-->
-    <scroll>
+    <div class="bg-layer" ref="layer"></div>
+    <scroll :data="songs" @scroll="scroll" :listen-scroll="listenScroll"
+             :probe-type="probeType" class="list" ref="list">
       <div class="song-list-wrapper">
         <song-list :songs="songs"></song-list>
       </div>
@@ -24,6 +25,15 @@
   import songList from '../../base/song-list/song-list.vue'
 
   export default {
+    data() {
+      return {
+        scrollY
+      }
+    },
+    created(){
+      this.probeType = 3
+      this.listenScroll = true
+    },
     props: {
       bgImage: {
         type: String,
@@ -41,6 +51,22 @@
     computed:{
       bgstyle() {
         return `backgroundImage:url(${this.bgImage})`
+      }
+    },
+    methods:{
+      //向下滑动歌曲列表的时候,新建一个html:layer,随时监听scroll在y轴上滚动的距离
+//      scroll向上的距离=lazy的改变距离
+      scroll(pos) {
+        this.scrollY=pos.y
+      }
+    },
+    mounted(){
+      this.$refs.list.$el.style.top=`${this.$refs.bgImage.clientHeight}px`
+    },
+    watch: {
+      scrollY(newY) {
+        this.$refs.layer.style['transform']=`translate3d(0,${newY}px,0)`
+        this.$refs.layer.style['webkitTransform']=`translate3d(0,${newY}px,0)`
       }
     },
     components:{
