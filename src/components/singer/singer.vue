@@ -31,7 +31,6 @@ const HOT_SINGER_LEN=10
       _getSingerList() {
         getSingerList().then((res) => {
           if(res.code===0) {
- //           console.log(this.singerLsit);
             this.singers=this._nowListMap(res.data.list);
           }
         })

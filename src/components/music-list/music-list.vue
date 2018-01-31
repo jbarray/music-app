@@ -67,6 +67,7 @@
       },
       //引入vuex
       select(item,index) {
+        console.log(item)
         this.selectPlay({
           list:this.songs,
           index

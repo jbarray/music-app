@@ -6,14 +6,14 @@
 
 <script type="text/ecmascript-6">
   import {mapGetters} from 'vuex'
-  import {getSingerDetail} from '../../api/singer'
-  import {createSong} from '../../common/js/song'
+  import {getSingerDetail,getSongDetail} from '../../api/singer'
+  import {createSong,createKey} from '../../common/js/song'
   import musicList from '../../components/music-list/music-list.vue'
   const ERR_OK = 200
   export default {
     data() {
       return {
-        songs: []
+        songs: [],
       }
     },
     computed: {
@@ -40,19 +40,44 @@
         }
         getSingerDetail(this.singer.id).then((res) => {
           if (res.code === 0) {
+//            res.data.list.forEach((item,index) => {
+//              getSongDetail(item.musicData.songmid).then((resp) => {
+//                if(resp.code === 0) {
+//                  this.keyArr.push(createKey(resp.data.items[0].vkey))
+////                  this.$set(this.keyArr,index,resp.data.items[0].vkey)
+//                }
+//              })
+//            })
             this.songs = this._normalizeSongs(res.data.list)
           }
         })
+        console.log(this.songs)
       },
       //整理获取的jsonp数据
       _normalizeSongs(list) {
         let ret=[]
-        list.forEach((item) => {
-          let {musicData} =item
-          //确保两个id存在
-          if(musicData.songid&&musicData.albummid){
-            ret.push(createSong(musicData))
-          }
+        let p
+//        console.log(this.keyList)
+//        res.data.list.forEach((item,index) => {
+//          getSongDetail(item.musicData.songmid).then((resp) => {
+//            if(resp.code === 0) {
+//              this.keyArr.push(createKey(resp.data.items[0].vkey))
+////                  this.$set(this.keyArr,index,resp.data.items[0].vkey)
+//            }
+//          })
+//        })
+        list.forEach((item,index) => {
+          getSongDetail(item.musicData.songmid).then((resp) => {
+            if(resp.code === 0) {
+              p=resp.data.items[0].vkey
+//                  this.$set(this.keyArr,index,resp.data.items[0].vkey)
+              let {musicData} =item
+              //确保两个id存在
+              if(musicData.songid&&musicData.albummid){
+                ret.push(createSong(musicData,p))
+              }
+            }
+          })
         })
         return ret
       }

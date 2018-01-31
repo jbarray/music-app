@@ -1,83 +1,93 @@
 <template>
   <div class="player" >
   <!--<div class="player" v-show="playlist.length>0">-->
-    <div class="normal-player" v-show="fullScreen">
-      <div class="background">
-        <img width="100%" height="100%" :src="currentSong.image">
-      </div>
-      <div class="top">
-        <div class="back" @click="back">
-          <i class="icon-back"></i>
+    <transition name="normal"
+    @enter="enter"
+    @after-enter="afterEnter"
+    @leave="leave"
+    @after-leave="afterLeave">
+      <div class="normal-player" v-show="fullScreen">
+        <div class="background">
+          <img width="100%" height="100%" :src="currentSong.image">
         </div>
-        <h1 class="title" v-html="currentSong.name"></h1>
-        <h2 class="subtitle" v-html="currentSong.singer"></h2>
-      </div>
-      <div class="middle">
-        <div class="middle-l" ref="middleL">
-          <div class="cd-wrapper" ref="cdWrapper">
-            <div class="cd" >
-              <img class="image" :src="currentSong.image">
+        <div class="top">
+          <div class="back" @click="back">
+            <i class="icon-back"></i>
+          </div>
+          <h1 class="title" v-html="currentSong.name"></h1>
+          <h2 class="subtitle" v-html="currentSong.singer"></h2>
+        </div>
+        <div class="middle">
+          <div class="middle-l" ref="middleL">
+            <div class="cd-wrapper" ref="cdWrapper">
+              <div class="cd" >
+                <img class="image" :src="currentSong.image">
+              </div>
+            </div>
+            <div class="playing-lyric-wrapper">
+              <div class="playing-lyric"></div>
             </div>
           </div>
-          <div class="playing-lyric-wrapper">
-            <div class="playing-lyric"></div>
+        </div>
+        <div class="bottom">
+          <div class="dot-wrapper">
+            <span class="dot" ></span>
+            <span class="dot" ></span>
+          </div>
+          <div class="progress-wrapper">
+            <span class="time time-l"></span>
+            <div class="progress-bar-wrapper">
+              <!--<progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>-->
+            </div>
+            <!--<span class="time time-r">{{format(currentSong.duration)}}</span>-->
+          </div>
+          <div class="operators">
+            <div class="icon i-left">
+              <i class="icon-sequence"></i>
+            </div>
+            <div class="icon i-left" >
+              <i  class="icon-prev"></i>
+            </div>
+            <div class="icon i-center" >
+              <i class="icon-play" @click="togglePlaying"></i>
+            </div>
+            <div class="icon i-right">
+              <i  class="icon-next"></i>
+            </div>
+            <div class="icon i-right">
+              <i  class="icon icon-not-favorite"></i>
+            </div>
           </div>
         </div>
       </div>
-      <div class="bottom">
-        <div class="dot-wrapper">
-          <span class="dot" ></span>
-          <span class="dot" ></span>
+    </transition>
+    <transition name="mini">
+      <div class="mini-player" v-show="!fullScreen" @click="open">
+        <div class="icon">
+          <img  width="40" height="40" :src="currentSong.image">
         </div>
-        <div class="progress-wrapper">
-          <span class="time time-l"></span>
-          <div class="progress-bar-wrapper">
-            <!--<progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>-->
-          </div>
-          <!--<span class="time time-r">{{format(currentSong.duration)}}</span>-->
+        <div class="text">
+          <h2 class="name" v-html="currentSong.name"></h2>
+          <p class="desc" v-html="currentSong.singer"></p>
         </div>
-        <div class="operators">
-          <div class="icon i-left">
-            <i :class="iconMode"></i>
-          </div>
-          <div class="icon i-left" :class="disableCls">
-            <i  class="icon-prev"></i>
-          </div>
-          <div class="icon i-center" :class="disableCls">
-            <i :class="playIcon"></i>
-          </div>
-          <div class="icon i-right" :class="disableCls">
-            <i  class="icon-next"></i>
-          </div>
-          <div class="icon i-right">
-            <i  class="icon" ></i>
-          </div>
+        <div class="control">
+          <!--<progress-circle :radius="radius" :percent="percent">-->
+            <!--<i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>-->
+          <!--</progress-circle>-->
+        </div>
+        <div class="control">
+          <i class="icon-playlist"></i>
         </div>
       </div>
-    </div>
-    <div class="mini-player" v-show="!fullScreen" @click="open">
-      <div class="icon">
-        <img  width="40" height="40" :src="currentSong.image">
-      </div>
-      <div class="text">
-        <h2 class="name" v-html="currentSong.name"></h2>
-        <p class="desc" v-html="currentSong.singer"></p>
-      </div>
-      <div class="control">
-        <!--<progress-circle :radius="radius" :percent="percent">-->
-          <!--<i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>-->
-        <!--</progress-circle>-->
-      </div>
-      <div class="control">
-        <i class="icon-playlist"></i>
-      </div>
-    </div>
+    </transition>
+    <!--播放音乐-->
+    <audio :src="currentSong.url" ref="audio"></audio>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import {mapGetters,mapMutations} from 'vuex'
-
+import animations from 'create-keyframe-animation'
 
   export default {
 
@@ -100,19 +110,49 @@ import {mapGetters,mapMutations} from 'vuex'
     methods:{
 //      ...mapActions([
 //        'savePlayHistory'
-//      ])
+//      ]),
 //      修改vuex中的值
-//      back() {
-//        this.setFullScreen(false)
-//      },
-//      open() {
-//        this.setFullScreen(true)
-//      },
-//      ...mapMutations({
-//        setFullScreen: 'SET_FULL_SCREEN'
-//      }),
-    },
+      back() {
+        this.setFullScreen(false)
+      },
+      open() {
+        this.setFullScreen(true)
+      },
+      togglePlaying() {
+        this.setPlayingState(!this.playing)
+      },
+      ...mapMutations({
+        setFullScreen: 'SET_FULL_SCREEN',
+        setPlayingState:'SET_PLAYING_STATE'
+      }),
+      enter() {
 
+      },
+      afterEnter() {
+
+      },
+      leave() {
+
+      },
+      afterLeave() {
+
+      },
+    },
+    watch:{
+      //当currentSong发生改变的时候,开始播放此歌曲
+      currentSong() {
+        //添加延时,防止此dom还没有的时候就执行
+        this.$nextTick(() => {
+          this.$refs.audio.play()
+        })
+      },
+      playing(newPlaying) {
+        this.$nextTick(() => {
+          const audio = this.$refs.audio
+          newPlaying ? audio.play() : audio.pause()
+        })
+      }
+    },
     components: {
 
     }

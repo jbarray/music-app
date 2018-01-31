@@ -1,5 +1,5 @@
 import jsonp from '../common/js/jsonp'
- import {commonParams,options} from "./config"
+ import {commonParams,options,option} from "./config"
 // 自代码
 export function getSingerList() {
   const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
@@ -35,4 +35,26 @@ export function getSingerDetail(singerId) {
 
   return jsonp(url, data, options)
 }
+//获取歌曲播放地址
+export function getSongDetail(songmid) {
+  const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
+
+  const data = Object.assign({}, commonParams, {
+    hostUin: 0,
+    loginUin: 0,
+    uin:0,
+    needNewCode: 0,
+    platform: 'yqq',
+    cid:205361747,
+    guid:658661956,
+    // jsonpCallback:successCallback(songmid),
+    // callback:'MusicJsonCallback8729489705873366',
+    // callback:successCallback(),
+     songmid:songmid,
+    filename:'C400'+songmid+'.m4a'
+  })
+
+  return jsonp(url, data, option)
+}
+
 

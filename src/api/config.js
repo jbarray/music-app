@@ -26,3 +26,17 @@ export const options = {
 }
 
 export const ERR_OK = 0
+
+// 传递函数名
+export const option = {
+  params: {
+    'jsonpCallback':successCallback(),
+  }
+}
+
+export function successCallback() {
+  var h1=document.createElement('h1');
+  h1.innerHTML='MusicJsonCallback7907692907763895'
+  document.getElementsByTagName("body")[0].append(h1);
+  return h1.innerHTML
+}
