@@ -33,7 +33,6 @@ export const option = {
     'jsonpCallback':successCallback(),
   }
 }
-
 export function successCallback() {
   var h1=document.createElement('h1');
   h1.innerHTML='MusicJsonCallback7907692907763895'

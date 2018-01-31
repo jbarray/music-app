@@ -20,7 +20,7 @@
         <div class="middle">
           <div class="middle-l" ref="middleL">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd" >
+              <div class="cd" :class="cdCls">
                 <img class="image" :src="currentSong.image">
               </div>
             </div>
@@ -30,17 +30,17 @@
           </div>
         </div>
         <div class="bottom">
-          <div class="dot-wrapper">
-            <span class="dot" ></span>
-            <span class="dot" ></span>
-          </div>
-          <div class="progress-wrapper">
-            <span class="time time-l"></span>
-            <div class="progress-bar-wrapper">
-              <!--<progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>-->
-            </div>
-            <!--<span class="time time-r">{{format(currentSong.duration)}}</span>-->
-          </div>
+          <!--<div class="dot-wrapper">-->
+            <!--<span class="dot" ></span>-->
+            <!--<span class="dot" ></span>-->
+          <!--</div>-->
+          <!--<div class="progress-wrapper">-->
+            <!--<span class="time time-l"></span>-->
+            <!--<div class="progress-bar-wrapper">-->
+              <!--&lt;!&ndash;<progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>&ndash;&gt;-->
+            <!--</div>-->
+            <!--&lt;!&ndash;<span class="time time-r">{{format(currentSong.duration)}}</span>&ndash;&gt;-->
+          <!--</div>-->
           <div class="operators">
             <div class="icon i-left">
               <i class="icon-sequence"></i>
@@ -49,7 +49,7 @@
               <i  class="icon-prev"></i>
             </div>
             <div class="icon i-center" >
-              <i class="icon-play" @click="togglePlaying"></i>
+              <i  @click="togglePlaying" :class="playIcon"></i>
             </div>
             <div class="icon i-right">
               <i  class="icon-next"></i>
@@ -63,7 +63,7 @@
     </transition>
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="open">
-        <div class="icon">
+        <div class="icon" :class="miniCdCls">
           <img  width="40" height="40" :src="currentSong.image">
         </div>
         <div class="text">
@@ -71,9 +71,7 @@
           <p class="desc" v-html="currentSong.singer"></p>
         </div>
         <div class="control">
-          <!--<progress-circle :radius="radius" :percent="percent">-->
-            <!--<i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>-->
-          <!--</progress-circle>-->
+          <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
         </div>
         <div class="control">
           <i class="icon-playlist"></i>
@@ -97,6 +95,20 @@ import animations from 'create-keyframe-animation'
       }
     },
     computed: {
+      // 点击播放按钮 改变图标样式
+      playIcon() {
+        return this.playing ? 'icon-pause' : 'icon-play'
+      },
+      miniIcon() {
+        return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
+      },
+      // 点击播放按钮 唱片旋转
+      cdCls() {
+        return this.playing ? 'play' : 'play pause'
+      },
+      miniCdCls() {
+        return this.playing ? 'play' : 'play pause'
+      },
       ...mapGetters([
         'currentIndex',
         'fullScreen',
@@ -107,8 +119,7 @@ import animations from 'create-keyframe-animation'
     created() {
 
     },
-    methods:{
-//      ...mapActions([
+    methods:{//      ...mapActions([
 //        'savePlayHistory'
 //      ]),
 //      修改vuex中的值
@@ -118,6 +129,7 @@ import animations from 'create-keyframe-animation'
       open() {
         this.setFullScreen(true)
       },
+      // 点击播放按钮 改变播放状态
       togglePlaying() {
         this.setPlayingState(!this.playing)
       },
@@ -162,7 +174,6 @@ import animations from 'create-keyframe-animation'
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-
   .player
     .normal-player
       position: fixed
