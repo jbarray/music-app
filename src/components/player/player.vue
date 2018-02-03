@@ -1,6 +1,6 @@
 <template>
   <div class="player" >
-  <div class="player" v-show="playlist.length>0">
+  <!--<div class="player" v-show="playlist.length>0">-->
     <transition name="normal"
     @enter="enter"
     @after-enter="afterEnter"
@@ -81,7 +81,7 @@
     <!--播放音乐-->
     <audio :src="currentSong.url" ref="audio"></audio>
   </div>
-  </div>
+  <!--</div>-->
 </template>
 
 <script type="text/ecmascript-6">
@@ -138,6 +138,8 @@ import animations from 'create-keyframe-animation'
           index = this.playlist.length - 1
         }
         this.setCurrentIndex(index)
+//        this.playing="play"
+//        this.setPlayingState(this.playing)
       },
       next() {
         let index = this.currentIndex + 1
