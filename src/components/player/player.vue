@@ -1,6 +1,6 @@
 <template>
   <div class="player" >
-  <!--<div class="player" v-show="playlist.length>0">-->
+  <div class="player" v-show="playlist.length>0">
     <transition name="normal"
     @enter="enter"
     @after-enter="afterEnter"
@@ -46,13 +46,13 @@
               <i class="icon-sequence"></i>
             </div>
             <div class="icon i-left" >
-              <i  class="icon-prev"></i>
+              <i @click="pre" class="icon-prev"></i>
             </div>
-            <div class="icon i-center" >
+            <div class="icon i-center">
               <i  @click="togglePlaying" :class="playIcon"></i>
             </div>
             <div class="icon i-right">
-              <i  class="icon-next"></i>
+              <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
               <i  class="icon icon-not-favorite"></i>
@@ -80,6 +80,7 @@
     </transition>
     <!--播放音乐-->
     <audio :src="currentSong.url" ref="audio"></audio>
+  </div>
   </div>
 </template>
 
@@ -113,7 +114,8 @@ import animations from 'create-keyframe-animation'
         'currentIndex',
         'fullScreen',
         'playing',
-        'currentSong'
+        'currentSong',
+        'playlist'
       ])
     },
     created() {
@@ -129,13 +131,29 @@ import animations from 'create-keyframe-animation'
       open() {
         this.setFullScreen(true)
       },
+      //上一曲和下一曲
+      pre() {
+        let index=this.currentIndex - 1
+        if(index === -1){
+          index = this.playlist.length - 1
+        }
+        this.setCurrentIndex(index)
+      },
+      next() {
+        let index = this.currentIndex + 1
+        if(index === this.playlist.length){
+          index = 0
+        }
+        this.setCurrentIndex(index)
+      },
       // 点击播放按钮 改变播放状态
       togglePlaying() {
         this.setPlayingState(!this.playing)
       },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
-        setPlayingState:'SET_PLAYING_STATE'
+        setPlayingState:'SET_PLAYING_STATE',
+        setCurrentIndex:'SET_CURRENT_INDEX'
       }),
       enter() {
 
