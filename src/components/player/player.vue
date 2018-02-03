@@ -79,7 +79,7 @@
       </div>
     </transition>
     <!--播放音乐-->
-    <audio :src="currentSong.url" ref="audio"></audio>
+    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error"></audio>
   </div>
   </div>
 </template>
@@ -92,7 +92,7 @@ import animations from 'create-keyframe-animation'
 
     data() {
       return {
-
+        songPlay:false
       }
     },
     computed: {
@@ -133,40 +133,59 @@ import animations from 'create-keyframe-animation'
       },
       //上一曲和下一曲
       pre() {
+        if(!this.songPlay) {
+          return
+        }
         let index=this.currentIndex - 1
         if(index === -1){
           index = this.playlist.length - 1
         }
         this.setCurrentIndex(index)
+        this.songPlay=false
       },
       next() {
+        if(!this.songPlay) {
+          return
+        }
         let index = this.currentIndex + 1
         if(index === this.playlist.length){
           index = 0
         }
         this.setCurrentIndex(index)
+        this.songPlay=false
       },
       // 点击播放按钮 改变播放状态
       togglePlaying() {
+        if(!this.songPlay) {
+          return
+        }
         this.setPlayingState(!this.playing)
+        this.songPlay=false
       },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
         setPlayingState:'SET_PLAYING_STATE',
         setCurrentIndex:'SET_CURRENT_INDEX'
       }),
-      enter() {
-
+      //保证不能频繁点击 标志位歌曲已经准备好的时候canplay=ready才可以点
+      ready() {
+        this.songPlay=true
       },
-      afterEnter() {
-
+      error() {
+        this.songPlay=true
       },
-      leave() {
-
-      },
-      afterLeave() {
-
-      },
+//      enter() {
+//
+//      },
+//      afterEnter() {
+//
+//      },
+//      leave() {
+//
+//      },
+//      afterLeave() {
+//
+//      },
     },
     watch:{
       //当currentSong发生改变的时候,开始播放此歌曲
