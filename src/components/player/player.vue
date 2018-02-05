@@ -1,6 +1,6 @@
 <template>
   <div class="player" >
-  <div class="player" v-show="playlist.length>0">
+  <!--<div class="player" v-show="playlist.length>0">-->
     <transition name="normal"
     @enter="enter"
     @after-enter="afterEnter"
@@ -35,11 +35,11 @@
             <!--<span class="dot" ></span>-->
           <!--</div>-->
           <!--<div class="progress-wrapper">-->
-            <!--<span class="time time-l"></span>-->
-            <!--<div class="progress-bar-wrapper">-->
-              <!--&lt;!&ndash;<progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>&ndash;&gt;-->
-            <!--</div>-->
-            <!--&lt;!&ndash;<span class="time time-r">{{format(currentSong.duration)}}</span>&ndash;&gt;-->
+            <span class="time time-l">{{format(currentTime)}}</span>
+            <div class="progress-bar-wrapper">
+              <progress-bar :percent="percent"></progress-bar>
+            </div>
+            <span class="time time-r">{{format(currentSong.duration)}}</span>
           <!--</div>-->
           <div class="operators">
             <div class="icon i-left">
@@ -79,20 +79,22 @@
       </div>
     </transition>
     <!--播放音乐-->
-    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error"></audio>
+    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="dateTimeup" @></audio>
   </div>
-  </div>
+  <!--</div>-->
 </template>
 
 <script type="text/ecmascript-6">
 import {mapGetters,mapMutations} from 'vuex'
 import animations from 'create-keyframe-animation'
+import progressBar  from '../../base/progress-bar/progress-bar.vue'
 
   export default {
 
     data() {
       return {
-        songPlay:false
+        songPlay:false,
+        currentTime:0
       }
     },
     computed: {
@@ -109,6 +111,9 @@ import animations from 'create-keyframe-animation'
       },
       miniCdCls() {
         return this.playing ? 'play' : 'play pause'
+      },
+      percent() {
+        return this.currentTime/this.currentSong.duration
       },
       ...mapGetters([
         'currentIndex',
@@ -160,7 +165,7 @@ import animations from 'create-keyframe-animation'
           return
         }
         this.setPlayingState(!this.playing)
-        this.songPlay=false
+//        this.songPlay=false
       },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
@@ -174,18 +179,38 @@ import animations from 'create-keyframe-animation'
       error() {
         this.songPlay=true
       },
-//      enter() {
-//
-//      },
-//      afterEnter() {
-//
-//      },
-//      leave() {
-//
-//      },
-//      afterLeave() {
-//
-//      },
+      //获取动态时间
+      dateTimeup(e) {
+        this.currentTime=e.target.currentTime
+      },
+        //将时间整理成分和秒
+      format(t) {
+         t = t |0
+        let min = t /60 |0
+        let second = t % 60
+        let se=this._change(second,2)
+        return `${min}:${se}`
+      },
+      _change(num,n) {
+        let len = num.toString().length
+        if(len < n) {
+          num = '0'+ num
+          len++
+        }
+        return num
+      },
+      enter() {
+
+      },
+      afterEnter() {
+
+      },
+      leave() {
+
+      },
+      afterLeave() {
+
+      },
     },
     watch:{
       //当currentSong发生改变的时候,开始播放此歌曲
@@ -203,7 +228,7 @@ import animations from 'create-keyframe-animation'
       }
     },
     components: {
-
+      progressBar
     }
   }
 </script>
