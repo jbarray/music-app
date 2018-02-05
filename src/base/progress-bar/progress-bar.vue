@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-bar" ref="progressBar">
+  <div class="progress-bar" ref="progressBar" @click="touchProgressBar">
     <div class="bar-inner">
       <div class="progress" ref="progress"></div>
       <div class="progress-btn-wrapper" ref="progressBtn"
@@ -62,14 +62,21 @@ const transform = prefixStyle('transform')
         this.touch.initiated=false
         //计算得出当前的percent
           //  当前黄色宽度 / 可用总宽度
-        const AllWidth=this.$refs.progressBar.clientWidth- progressBtnWidth
-        const percent = this.$refs.progress.clientWidth / AllWidth
-        this.$emit('percentChange',percent)
+        this._togglePercent()
+      },
+      touchProgressBar(e) {
+        this._upset(e.offsetX)
+        this._togglePercent()
       },
       _upset(offsetWidth) {
         this.$refs.progress.style.width=`${offsetWidth}px`
         this.$refs.progressBtn.style[transform]=`translate3d(${offsetWidth}px,0,0)`
-      }
+      },
+      _togglePercent() {
+        const AllWidth=this.$refs.progressBar.clientWidth- progressBtnWidth
+        const percent = this.$refs.progress.clientWidth / AllWidth
+        this.$emit('percentChange',percent)
+      },
     }
   }
 </script>
