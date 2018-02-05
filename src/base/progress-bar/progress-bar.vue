@@ -2,7 +2,11 @@
   <div class="progress-bar" ref="progressBar">
     <div class="bar-inner">
       <div class="progress" ref="progress"></div>
-      <div class="progress-btn-wrapper" ref="progressBtn">
+      <div class="progress-btn-wrapper" ref="progressBtn"
+      @touchstart.prevent="progressTouchStart"
+      @touchmove.prevent="progressTouchMove"
+      @touchend.prevent="progressTouchEnd"
+      >
         <div class="progress-btn"></div>
       </div>
     </div>
@@ -28,11 +32,43 @@ const transform = prefixStyle('transform')
           //黄色部分=总长度-小球的宽度
           const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
           const offsetWidth = newPercent * barWidth
-          this.$refs.progress.style.width=`${offsetWidth}px`
-//          this.$refs.progressBar.style.paddingLeft=`${offsetWidth}px`
-//          console.log(this.$refs.progressBar.style.paddingLeft)
-          this.$refs.progressBtn.style[transform]=`translate3d(${offsetWidth}px,0,0)`
+          this._upset(offsetWidth)
         }
+      }
+    },
+    created() {
+      //定义一个在method中使用的对象
+      this.touch={}
+    },
+    methods:{
+      //分别获取第一次接触滚动条的位置和滑动的位置 计算出已经改变的宽度差,计算当前的percent,从而更改时间
+      progressTouchStart(e) {
+        //证明已经进行过初始化
+        this.touch.initiated=true
+        this.touch.startX=e.touches[0].pageX
+        this.touch.left=this.$refs.progress.style.width
+      },
+      progressTouchMove(e) {
+        if(!this.touch.initiated) {
+          return
+        }
+        //获取 滑动宽度差=滑动点击位置-初次接触的位置
+        const deltaX=e.touches[0].pageX-this.touch.startX
+        //滑动的距离差deltaX 最小值为0 最大值为(总长度-小圆图标宽度)
+        const offsetWidth=Math.min(this.$refs.progressBar.clientWidth - progressBtnWidth,Math.max(0,this.touch.startX + deltaX))
+        this._upset(offsetWidth)
+      },
+      progressTouchEnd(e) {
+        this.touch.initiated=false
+        //计算得出当前的percent
+          //  当前黄色宽度 / 可用总宽度
+        const AllWidth=this.$refs.progressBar.clientWidth- progressBtnWidth
+        const percent = this.$refs.progress.clientWidth / AllWidth
+        this.$emit('percentChange',percent)
+      },
+      _upset(offsetWidth) {
+        this.$refs.progress.style.width=`${offsetWidth}px`
+        this.$refs.progressBtn.style[transform]=`translate3d(${offsetWidth}px,0,0)`
       }
     }
   }

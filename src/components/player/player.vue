@@ -37,7 +37,7 @@
           <!--<div class="progress-wrapper">-->
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
-              <progress-bar :percent="percent"></progress-bar>
+              <progress-bar :percent="percent" @percentChange="percentMove"></progress-bar>
             </div>
             <span class="time time-r">{{format(currentSong.duration)}}</span>
           <!--</div>-->
@@ -211,6 +211,10 @@ import progressBar  from '../../base/progress-bar/progress-bar.vue'
       afterLeave() {
 
       },
+      //时间进度条返回的percent,用于改变歌曲的播放当前时间
+      percentMove(percent) {
+        this.$refs.audio.currentTime=this.currentSong.duration * percent
+      }
     },
     watch:{
       //当currentSong发生改变的时候,开始播放此歌曲
