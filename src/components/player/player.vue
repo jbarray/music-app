@@ -214,6 +214,10 @@ import progressBar  from '../../base/progress-bar/progress-bar.vue'
       //时间进度条返回的percent,用于改变歌曲的播放当前时间
       percentMove(percent) {
         this.$refs.audio.currentTime=this.currentSong.duration * percent
+        //if当前状态没有播放的话,进行播放
+        if(!this.playing){
+          return this.playing
+        }
       }
     },
     watch:{
