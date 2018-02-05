@@ -42,8 +42,8 @@
             <span class="time time-r">{{format(currentSong.duration)}}</span>
           <!--</div>-->
           <div class="operators">
-            <div class="icon i-left">
-              <i class="icon-sequence"></i>
+            <div class="icon i-left" @click="changeMode">
+              <i :class="iconMode"></i>
             </div>
             <div class="icon i-left" >
               <i @click="pre" class="icon-prev"></i>
@@ -79,7 +79,7 @@
       </div>
     </transition>
     <!--播放音乐-->
-    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="dateTimeup" @></audio>
+    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="dateTimeup" @ended="end"></audio>
   </div>
   <!--</div>-->
 </template>
@@ -88,7 +88,8 @@
 import {mapGetters,mapMutations} from 'vuex'
 import animations from 'create-keyframe-animation'
 import progressBar  from '../../base/progress-bar/progress-bar.vue'
-
+import {playMode} from '../../common/js/config'
+import {shuffle} from '../../common/js/utill'
   export default {
 
     data() {
@@ -115,12 +116,18 @@ import progressBar  from '../../base/progress-bar/progress-bar.vue'
       percent() {
         return this.currentTime/this.currentSong.duration
       },
+      //更改播放样式的图标 ,即更改其class
+      iconMode() {
+        return this.mode === playMode.sequence? 'icon-sequence' : this.mode === playMode.loop? 'icon-loop' : 'icon-random'
+      },
       ...mapGetters([
         'currentIndex',
         'fullScreen',
         'playing',
         'currentSong',
-        'playlist'
+        'playlist',
+        'mode',
+        'sequenceList'
       ])
     },
     created() {
@@ -136,6 +143,17 @@ import progressBar  from '../../base/progress-bar/progress-bar.vue'
       open() {
         this.setFullScreen(true)
       },
+      //一首歌曲结束后
+      end() {
+        //实现循环播放
+        if(this.mode === playMode.loop) {
+          this.$refs.audio.currentTime = 0
+          this.$refs.audio.play()
+        }
+        else{
+          this.next()
+        }
+      },
       //上一曲和下一曲
       pre() {
         if(!this.songPlay) {
@@ -147,6 +165,11 @@ import progressBar  from '../../base/progress-bar/progress-bar.vue'
         }
         this.setCurrentIndex(index)
         this.songPlay=false
+        //if当前状态没有播放的话,进行播放
+//        if(!this.playing){
+//          this.togglePlaying()
+//        }
+//        console.log(this.playing)
       },
       next() {
         if(!this.songPlay) {
@@ -158,6 +181,10 @@ import progressBar  from '../../base/progress-bar/progress-bar.vue'
         }
         this.setCurrentIndex(index)
         this.songPlay=false
+        //if当前状态没有播放的话,进行播放
+        if(!this.playing){
+          this.togglePlaying()
+        }
       },
       // 点击播放按钮 改变播放状态
       togglePlaying() {
@@ -170,7 +197,9 @@ import progressBar  from '../../base/progress-bar/progress-bar.vue'
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
         setPlayingState:'SET_PLAYING_STATE',
-        setCurrentIndex:'SET_CURRENT_INDEX'
+        setCurrentIndex:'SET_CURRENT_INDEX',
+        setPlayMode:'SET_PLAY_MODE',
+        setPlayList:'SET_PLAYLIST'
       }),
       //保证不能频繁点击 标志位歌曲已经准备好的时候canplay=ready才可以点
       ready() {
@@ -216,13 +245,40 @@ import progressBar  from '../../base/progress-bar/progress-bar.vue'
         this.$refs.audio.currentTime=this.currentSong.duration * percent
         //if当前状态没有播放的话,进行播放
         if(!this.playing){
-          return this.playing
+          this.togglePlaying()
         }
+      },
+      //点击 播放模式按钮 ,会改变vuex中mode的值
+      changeMode() {
+       const mode = (this.mode+1)%3
+        this.setPlayMode(mode)
+        //歌曲播放模式改变的主要是歌曲播放列表,随机播放时列表和其他两个模式的不同
+        let list = null
+        if(mode === playMode.random) {
+         // 打破重组playList
+          list = shuffle(this.sequenceList)
+        }else{
+         list = this.sequenceList
+        }
+        //修改播放列表时,currentIndex不发生改变,即当前歌曲不改变
+        this.resetCurrentIndex(list)
+        //修改播放列表
+        this.setPlayList(list)
+      },
+      resetCurrentIndex(arr) {
+        let index = arr.findIndex((item) => {
+          return item.id === this.currentSong.id
+        })
+        this.setCurrentIndex(index)
       }
     },
     watch:{
       //当currentSong发生改变的时候,开始播放此歌曲
-      currentSong() {
+      currentSong(newSong,oldSong) {
+        // 如果song变化前后 是同一首歌 则保持当前状态不变(如:播放状态)
+        if (newSong.id === oldSong.id) {
+          return
+        }
         //添加延时,防止此dom还没有的时候就执行
         this.$nextTick(() => {
           this.$refs.audio.play()
