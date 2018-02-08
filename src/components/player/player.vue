@@ -18,7 +18,7 @@
           <h2 class="subtitle" v-html="currentSong.singer"></h2>
         </div>
         <div class="middle">
-          <div class="middle-l" ref="middleL">
+          <div class="middle-l" ref="middleL" v-show="pictureShow" @click="changeLyric">
             <div class="cd-wrapper" ref="cdWrapper">
               <div class="cd" :class="cdCls">
                 <img class="image" :src="currentSong.image">
@@ -28,13 +28,74 @@
               <div class="playing-lyric"></div>
             </div>
           </div>
+          <div class="middle-r" ref="middleR"  v-show="!pictureShow" @click="changeLyric">
+            <div class="lyric-wrapper">
+              <div >
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+                <p class="text" ref="lyricLine">歌词1行</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="bottom">
-          <!--<div class="dot-wrapper">-->
-            <!--<span class="dot" ></span>-->
-            <!--<span class="dot" ></span>-->
-          <!--</div>-->
-          <!--<div class="progress-wrapper">-->
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
               <progress-bar :percent="percent" @percentChange="percentMove"></progress-bar>
@@ -54,7 +115,7 @@
             <div class="icon i-right">
               <i @click="next" class="icon-next"></i>
             </div>
-            <div class="icon i-right">
+            <div class="icon i-right" @click="_getLyric">
               <i  class="icon icon-not-favorite"></i>
             </div>
           </div>
@@ -90,12 +151,14 @@ import animations from 'create-keyframe-animation'
 import progressBar  from '../../base/progress-bar/progress-bar.vue'
 import {playMode} from '../../common/js/config'
 import {shuffle} from '../../common/js/utill'
+import {getLyric} from '../../api/song'
   export default {
 
     data() {
       return {
         songPlay:false,
-        currentTime:0
+        currentTime:0,
+        pictureShow:true
       }
     },
     computed: {
@@ -131,7 +194,9 @@ import {shuffle} from '../../common/js/utill'
       ])
     },
     created() {
-
+//      getLyric(this.currentSong.mid).then((rep) =>{
+//        console.log(rep)
+//      })
     },
     methods:{//      ...mapActions([
 //        'savePlayHistory'
@@ -270,6 +335,10 @@ import {shuffle} from '../../common/js/utill'
           return item.id === this.currentSong.id
         })
         this.setCurrentIndex(index)
+      },
+      //歌词和照片的切换
+      changeLyric() {
+          this.pictureShow = !this.pictureShow
       }
     },
     watch:{
@@ -282,6 +351,7 @@ import {shuffle} from '../../common/js/utill'
         //添加延时,防止此dom还没有的时候就执行
         this.$nextTick(() => {
           this.$refs.audio.play()
+//          this.currentSong.getLyric()
         })
       },
       playing(newPlaying) {
