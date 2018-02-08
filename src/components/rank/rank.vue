@@ -16,6 +16,7 @@
       </ul>
       <Loading></Loading>
     </Scroll>
+    <router-view></router-view>
   </div>
 </template>
 
