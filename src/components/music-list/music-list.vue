@@ -17,7 +17,7 @@
     <scroll :data="songs" @scroll="scroll" :listen-scroll="listenScroll"
              :probe-type="probeType" class="list" ref="list">
       <div class="song-list-wrapper">
-        <song-list :songs="songs" @select="select"></song-list>
+        <song-list :songs="songs" @select="select" :rank="rank"></song-list>
       </div>
     </scroll>
   </div>
@@ -53,6 +53,10 @@
       title: {
         type: String,
         default: ''
+      },
+      rank:{
+        tyep:Boolean,
+        default:false
       }
     },
     computed:{
