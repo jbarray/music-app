@@ -115,7 +115,7 @@
             <div class="icon i-right">
               <i @click="next" class="icon-next"></i>
             </div>
-            <div class="icon i-right" @click="_getLyric">
+            <div class="icon i-right">
               <i  class="icon icon-not-favorite"></i>
             </div>
           </div>

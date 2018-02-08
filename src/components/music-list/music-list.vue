@@ -24,9 +24,11 @@
   import scroll from '../../base/scroll/scroll'
   import songList from '../../base/song-list/song-list.vue'
   import {mapActions} from 'vuex'
+  import {playlistMixin} from '../../common/js/mixin'
 
   const RESERVED_HEIGHT = 40
   export default {
+    mixins:[playlistMixin],
     data() {
       return {
         scrollY
@@ -56,6 +58,17 @@
       }
     },
     methods:{
+      //共用内容mixin的内容,
+      handlePlaylist(playlist) {
+        if(playlist) {
+          var bottom = '60px'
+        }
+        else{
+           bottom = ''
+        }
+        this.$refs.list.$el.style.bottom = bottom
+        this.$refs.list.refresh()
+      },
       //向下滑动歌曲列表的时候,新建一个html:layer,随时监听scroll在y轴上滚动的距离
 //      scroll向上的距离=lazy的改变距离
       //修整:1.滑一会后,图片再次出现.让lazy最后固定高度.最大值为图片clientHeight-顶部预留高度
