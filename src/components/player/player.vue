@@ -598,8 +598,8 @@ import {getLyric} from '../../api/song'
         .icon-mini
           font-size: 32px
           position: absolute
-          left: 0
-          top: 0
+          right: 60px
+          top: 14px
 
   @keyframes rotate
     0%
