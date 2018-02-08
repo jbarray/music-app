@@ -1,14 +1,43 @@
 <template>
   <div class="rank" ref="rank">
-    rank页面
+      <ul>
+        <li  class="item">
+          <div class="icon">
+            <img width="100" height="100"/>
+          </div>
+          <ul class="songlist">
+            <li class="song" >
+              <span></span>
+              <span></span>
+            </li>
+          </ul>
+        </li>
+      </ul>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import {getTopList} from '../../api/rank'
 
-
+import {ERR_OK} from '../../api/config'
   export default {
-
+    data() {
+      return{
+        topList:[]
+      }
+    },
+    created() {
+      this._getTopData()
+    },
+    methods: {
+      _getTopData() {
+        getTopList().then((res) => {
+          if (res.code === ERR_OK) {
+            this.topList=res.data.topList
+          }
+        })
+      }
+    }
   }
 </script>
 
