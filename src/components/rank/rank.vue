@@ -24,6 +24,7 @@ import {getTopList} from '../../api/rank'
 import Scroll from '../../base/scroll/scroll.vue'
 import Loading from '../../base/loading/loading.vue'
 import {playlistMixin} from '../../common/js/mixin'
+import {mapMutations} from 'vuex'
 
 import {ERR_OK} from '../../api/config'
   export default {
@@ -56,7 +57,11 @@ import {ERR_OK} from '../../api/config'
         this.$router.push({
           path:`/rank/${item.id}`
         })
-      }
+        this.setTopList(item)
+      },
+      ...mapMutations({
+        setTopList: 'SET_TOP_LIST'
+      })
 
     },
     components:{

@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <music-list ></music-list>
+    <music-list :title="title" :bg-image="bgImage"></music-list>
   </transition>
 </template>
 
