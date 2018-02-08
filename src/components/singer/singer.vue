@@ -11,10 +11,12 @@ import Singer from '../../common/js/singer'
 import listview from '../../base/listview/listview.vue'
 //mapMutations语法糖是对于引入vuex操作方法的封装
 import {mapMutations} from 'vuex'
+import {playlistMixin} from '../../common/js/mixin'
 
 const HOT_NAME='推荐'
 const HOT_SINGER_LEN=10
   export default {
+  mixins:[playlistMixin],
     data() {
       return {
         singers:[],
@@ -28,6 +30,11 @@ const HOT_SINGER_LEN=10
       this._getSingerList();
     },
     methods:{
+      playlistMixin(playlist) {
+        const bottom = playlist.length>0 ? "60px" : ''
+        this.$refs.singer.$el.style.bottom = bottom
+        this.$refs.list.refresh()
+      },
       _getSingerList() {
         getSingerList().then((res) => {
           if(res.code===0) {

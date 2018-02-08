@@ -85,6 +85,10 @@
       }
     },
     methods:{
+      //调用scroll的内容
+      refresh() {
+        this.$refs.listview.refresh()
+      },
 //      告诉父组件,点击某个歌手的事件已经启动
       selectItem(item){
         this.$emit('select',item)
