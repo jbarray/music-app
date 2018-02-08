@@ -1,6 +1,6 @@
 <template>
   <div class="recommend" ref="recommend">
-    <scroll ref="scroll" class="recommend-content" :data="discList">
+    <scroll ref="scroll" class="recommend-content" :data="discList" >
       <div>
        <div class="recommend-content">
          <!--轮播图-->
@@ -27,10 +27,10 @@
                </div>
              </li>
            </ul>
-         </div>
-         <!--页面没有出现内容的时候,会出现一个正在加载的图标-->
-         <div class="loading-container" v-show="!discList.length">
-           <loading></loading>
+           <!--页面没有出现内容的时候,会出现一个正在加载的图标-->
+           <div class="loading-container" v-show="!discList.length">
+             <loading></loading>
+           </div>
          </div>
        </div>
       </div>
@@ -45,8 +45,10 @@
   import {getDiscList} from '../../api/recommend'
   import Scroll from '../../../src/base/scroll/scroll'
   import loading from '../../../src/base/loading/loading.vue'
+  import {playlistMixin} from '../../common/js/mixin'
 
   export default {
+    mixins:[playlistMixin],
     data(){
       return {
         recommends:[],
@@ -63,6 +65,17 @@
        this. _getDiscList()
     },
     methods: {
+      //mini播放器的引入及适配
+      handlePlaylist(playlist) {
+        if(playlist) {
+          var bottom = '60px'
+        }
+        else{
+          bottom = ''
+        }
+        this.$refs.recommend.style.bottom = bottom
+        this.$refs.scroll.refresh()
+      },
       _getRecommend() {
         getRecommend().then((res) => {
           if(res.code === ERR_OK) {
@@ -105,6 +118,7 @@
     .recommend-content
       height: 100%
       overflow: hidden
+      position relative
       .slider-wrapper
         position: relative
         width: 100%
