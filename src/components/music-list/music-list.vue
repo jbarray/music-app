@@ -1,5 +1,8 @@
 <template>
   <div class="music-list">
+    <div class="back" @click="back">
+      <i class="icon-back"></i>
+    </div>
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgstyle" ref="bgImage">
       <div class="play-wrapper">
@@ -58,6 +61,10 @@
       }
     },
     methods:{
+      //点击返回按钮
+      back() {
+        this.$router.back()
+      },
       //共用内容mixin的内容,
       handlePlaylist(playlist) {
         if(playlist) {

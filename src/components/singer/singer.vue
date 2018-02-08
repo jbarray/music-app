@@ -30,9 +30,10 @@ const HOT_SINGER_LEN=10
       this._getSingerList();
     },
     methods:{
-      playlistMixin(playlist) {
+    //mini播放器的出现 mixins中添加内容
+      handlePlaylist(playlist) {
         const bottom = playlist.length>0 ? "60px" : ''
-        this.$refs.singer.$el.style.bottom = bottom
+        this.$refs.singer.style.bottom = bottom
         this.$refs.list.refresh()
       },
       _getSingerList() {
