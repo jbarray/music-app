@@ -2,7 +2,7 @@
   <div class="rank" ref="rank">
     <Scroll :data="topList" class="toplist" ref="toplist">
       <ul>
-        <li  class="item" v-for="item in topList">
+        <li  class="item" v-for="item in topList" @click="selectItem(item)">
           <div class="icon">
             <img width="100" height="100" v-lazy="item. picUrl"/>
           </div>
@@ -50,6 +50,12 @@ import {ERR_OK} from '../../api/config'
         const bottom = playlist.length > 0 ? '60px' : ''
         this.$refs.rank.style.bottom = bottom
         this.$refs.toplist.refresh()
+      },
+      //点击排行榜进入子路由
+      selectItem(item) {
+        this.$router.push({
+          path:`/rank/${item.id}`
+        })
       }
 
     },
