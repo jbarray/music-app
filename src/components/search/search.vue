@@ -1,12 +1,12 @@
 <template>
   <div class="search">
-    <searchBox :placeHolder="placeholder"></searchBox>
+    <searchBox :placeHolder="placeholder" ref="searchBox"></searchBox>
     <div class="shortcut-wrapper">
       <div class="shortcut">
         <div class="hot-key">
           <h1 class="title">热门搜索</h1>
           <ul>
-            <li class="item" v-for="item in hotKey">
+            <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
               <span>{{item.k}}</span>
             </li>
           </ul>
@@ -34,12 +34,17 @@ import {ERR_OK} from '../../api/config'
       this._getHotKey()
     },
     methods:{
+      //获取热门搜索数据
       _getHotKey() {
         getHotKey().then((res) => {
           if(res.code === ERR_OK) {
             this.hotKey=res.data.hotkey.slice(0,10)
           }
         })
+      },
+      //点击热门数据 搜索框中出现该词
+      addQuery(query) {
+        this.$refs.searchBox.setQuery(query)
       }
     }
   }
