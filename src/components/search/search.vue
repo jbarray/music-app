@@ -1,20 +1,47 @@
 <template>
   <div class="search">
     <searchBox :placeHolder="placeholder"></searchBox>
+    <div class="shortcut-wrapper">
+      <div class="shortcut">
+        <div class="hot-key">
+          <h1 class="title">热门搜索</h1>
+          <ul>
+            <li class="item" v-for="item in hotKey">
+              <span>{{item.k}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import searchBox from '../../base/search-box/search-box.vue'
+import {getHotKey} from '../../api/search'
+import {ERR_OK} from '../../api/config'
   export default {
     data() {
       return {
-        placeholder:'搜索歌曲,歌手'
+        placeholder:'搜索歌曲,歌手',
+        hotKey:[]
       }
     },
     components:{
       searchBox
     },
+    created() {
+      this._getHotKey()
+    },
+    methods:{
+      _getHotKey() {
+        getHotKey().then((res) => {
+          if(res.code === ERR_OK) {
+            this.hotKey=res.data.hotkey.slice(0,10)
+          }
+        })
+      }
+    }
   }
 </script>
 

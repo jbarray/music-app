@@ -24,6 +24,12 @@
       clear() {
         this.query = ''
       }
+    },
+    created() {
+      //一旦query发生改变,需要通知父组件
+      this.$watch('query',(newQuery) => {
+        this.$emit('query',newQuery)
+      })
     }
   }
 </script>
