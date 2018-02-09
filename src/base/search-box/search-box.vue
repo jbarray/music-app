@@ -1,8 +1,8 @@
 <template>
   <div class="search-box">
     <i class="icon-search"></i>
-    <input ref="query" :placeHolder="placeHolder" class="box" />
-    <i  class="icon-dismiss"></i>
+    <input ref="query" :placeHolder="placeHolder" v-model="query" class="box" />
+    <i v-show="query" class="icon-dismiss" @click="clear"></i>
   </div>
 </template>
 
@@ -20,7 +20,11 @@
         query: ''
       }
     },
-    methods: {}
+    methods: {
+      clear() {
+        this.query = ''
+      }
+    }
   }
 </script>
 
