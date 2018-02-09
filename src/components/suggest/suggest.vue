@@ -1,7 +1,7 @@
 <template>
   <Scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore">
     <ul class="suggest-list">
-      <li class="suggest-item" v-for="item in result">
+      <li class="suggest-item" v-for="item in result" @click="selectItem(item)">
         <div class="icon">
           <i :class="getIconCls(item)"></i>
         </div>
@@ -9,7 +9,7 @@
           <p class="text" v-html="getDisplayName(item)" ></p>
         </div>
       </li>
-      <loading v-show="hasMore"></loading>
+      <loading v-show="hasMore" title=" "></loading>
     </ul>
   </Scroll>
 </template>
@@ -21,6 +21,7 @@
   import {ERR_OK} from '../../api/config'
   import {mapMutations, mapActions} from 'vuex'
   import {filterSinger} from '../../common/js/song'
+  import Singer from '../../common/js/singer'
 
   const TYPE_SINGER = 'singer'
   const perpage = 20
@@ -107,12 +108,27 @@
           this.hasMore = false
         }
       },
+      //点击每一个搜索结果时
+      selectItem(item) {
+        if(item.type === TYPE_SINGER) {
+          const singer = new Singer({
+            id: item.singermid,
+            name: item.singername
+          })
+        this.$router.push({
+          path:`/search/${singer.id}`
+        })
+        this.setSinger(singer)
+        }
+      },
       _normalizeSongs(list) {
         let ret = []
 
         return ret
       },
-
+      ...mapMutations({
+        setSinger: 'SET_SINGER'
+      })
     },
     watch: {
       query(newQuery) {
