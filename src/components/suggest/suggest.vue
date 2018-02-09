@@ -1,25 +1,26 @@
 <template>
-  <div>
+  <div class="suggest">
     <ul class="suggest-list">
-      <li class="suggest-item">
+      <li class="suggest-item" v-for="item in result">
         <div class="icon">
-          <i ></i>
+          <i :class="getIconCls(item)"></i>
         </div>
         <div class="name">
-          <p class="text" ></p>
+          <p class="text" v-html="getDisplayName(item)" ></p>
         </div>
       </li>
-      <loading ></loading>
+      <!--<loading ></loading>-->
     </ul>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from '../../base/scroll/scroll'
-  import Loading from '../../base/loading/loading'
+//  import Loading from '../../base/loading/loading'
   import {search} from '../../api/search'
   import {ERR_OK} from '../../api/config'
   import {mapMutations, mapActions} from 'vuex'
+  import {filterSinger} from '../../common/js/song'
 
   const TYPE_SINGER = 'singer'
 
@@ -45,16 +46,38 @@
       search() {
         search(this.query,this.page,this.showSinger).then((res) => {
           if(res.code ===ERR_OK) {
-            console.log(res.data)
+            //将获得的数据进行整理
+            this.result=this._genResult(res.data)
           }
         })
       },
-      searchMore() {
-
-      },
-
       _genResult(data) {
-
+        let ret = []
+        //如果zhidao存在数据的话 即检索结果内有歌手的话,加入数组
+        if(data.zhida && data.zhida.singerid) {
+          ret.push({...data.zhida, ...{type:TYPE_SINGER}})
+        }
+        if(data.song) {
+          ret=ret.concat(data.song.list)
+        }
+        return ret
+      },
+      //检索结果 根据检索结果的不同,区分class 从而显示不同的logo
+      getIconCls(item) {
+        if(item.type === TYPE_SINGER) {
+          return 'icon-mine'
+        }else{
+          return 'icon-music'
+        }
+      },
+      //检索结果 根据检索结果的不同,区分html的内容
+      getDisplayName(item) {
+        if(item.type === TYPE_SINGER) {
+          return item.singername
+        }else{
+          //检索结果为歌曲的话 显示歌曲的名字和歌手的名字
+          return `${item.songname}-${filterSinger(item.singer)}`
+        }
       },
       _normalizeSongs(list) {
         let ret = []
@@ -70,7 +93,7 @@
     },
     components: {
       Scroll,
-      Loading,
+//      Loading,
     }
   }
 </script>

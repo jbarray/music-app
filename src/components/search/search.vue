@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <searchBox :placeHolder="placeholder" ref="searchBox" @query="onQueryChange"></searchBox>
-    <div class="shortcut-wrapper">
+    <div class="shortcut-wrapper" v-show="!query">
       <div class="shortcut">
         <div class="hot-key">
           <h1 class="title">热门搜索</h1>
@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-    <div class="search-result" v-show="query" ref="searchResult">
+    <div class="search-result" v-show="query" ref="searchResult" >
       <suggest :query="query" :showSinger="showSinger"></suggest>
     </div>
   </div>
@@ -29,7 +29,7 @@ import suggest from '../suggest/suggest.vue'
       return {
         placeholder:'搜索歌曲,歌手',
         hotKey:[],
-        showSinger:null,
+        showSinger:true,
         query:null
       }
     },
