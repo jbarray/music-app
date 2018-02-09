@@ -25,6 +25,7 @@ import searchBox from '../../base/search-box/search-box.vue'
 import {getHotKey} from '../../api/search'
 import {ERR_OK} from '../../api/config'
 import suggest from '../suggest/suggest.vue'
+
   export default {
     data() {
       return {
