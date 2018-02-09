@@ -9,14 +9,14 @@
           <p class="text" v-html="getDisplayName(item)" ></p>
         </div>
       </li>
-      <!--<loading ></loading>-->
+      <loading v-show="hasMore"></loading>
     </ul>
   </Scroll>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from '../../base/scroll/scroll'
-//  import Loading from '../../base/loading/loading'
+  import Loading from '../../base/loading/loading'
   import {search} from '../../api/search'
   import {ERR_OK} from '../../api/config'
   import {mapMutations, mapActions} from 'vuex'
@@ -121,7 +121,7 @@
     },
     components: {
       Scroll,
-//      Loading,
+      Loading,
     }
   }
 </script>
