@@ -1,13 +1,20 @@
 <template>
   <div class="search">
-   搜索页面
+    <searchBox :placeHolder="placeholder"></searchBox>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-
+import searchBox from '../../base/search-box/search-box.vue'
   export default {
-
+    data() {
+      return {
+        placeholder:'搜索歌曲,歌手'
+      }
+    },
+    components:{
+      searchBox
+    },
   }
 </script>
 
