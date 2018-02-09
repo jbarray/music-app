@@ -119,6 +119,8 @@
           path:`/search/${singer.id}`
         })
         this.setSinger(singer)
+        }else{
+          this.insertSong(item)
         }
       },
       _normalizeSongs(list) {
@@ -128,6 +130,9 @@
       },
       ...mapMutations({
         setSinger: 'SET_SINGER'
+      }),
+      ...mapActions({
+        insertSong:'insertSong'
       })
     },
     watch: {
