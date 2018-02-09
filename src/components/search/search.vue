@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <searchBox :placeHolder="placeholder" ref="searchBox"></searchBox>
+    <searchBox :placeHolder="placeholder" ref="searchBox" @query="onQueryChange"></searchBox>
     <div class="shortcut-wrapper">
       <div class="shortcut">
         <div class="hot-key">
@@ -13,6 +13,9 @@
         </div>
       </div>
     </div>
+    <div class="search-result" v-show="query" ref="searchResult">
+      <suggest :query="query" :showSinger="showSinger"></suggest>
+    </div>
   </div>
 </template>
 
@@ -20,15 +23,19 @@
 import searchBox from '../../base/search-box/search-box.vue'
 import {getHotKey} from '../../api/search'
 import {ERR_OK} from '../../api/config'
+import suggest from '../suggest/suggest.vue'
   export default {
     data() {
       return {
         placeholder:'搜索歌曲,歌手',
-        hotKey:[]
+        hotKey:[],
+        showSinger:null,
+        query:null
       }
     },
     components:{
-      searchBox
+      searchBox,
+      suggest
     },
     created() {
       this._getHotKey()
@@ -45,6 +52,9 @@ import {ERR_OK} from '../../api/config'
       //点击热门数据 搜索框中出现该词
       addQuery(query) {
         this.$refs.searchBox.setQuery(query)
+      },
+      onQueryChange(data) {
+        this.query=data
       }
     }
   }
