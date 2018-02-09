@@ -59,7 +59,7 @@
             me.$emit('scroll', pos)
           })
         }
-
+        //如果需要下拉刷新的话 监听.当scroll.y到达scroll.maxScrollY + 50 的位置 就通知父组件 展示新数据
         if (this.pullup) {
           this.scroll.on('scrollEnd', () => {
             if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {

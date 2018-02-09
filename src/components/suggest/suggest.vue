@@ -1,5 +1,5 @@
 <template>
-  <div class="suggest">
+  <Scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore">
     <ul class="suggest-list">
       <li class="suggest-item" v-for="item in result">
         <div class="icon">
@@ -11,7 +11,7 @@
       </li>
       <!--<loading ></loading>-->
     </ul>
-  </div>
+  </Scroll>
 </template>
 
 <script type="text/ecmascript-6">
@@ -23,7 +23,7 @@
   import {filterSinger} from '../../common/js/song'
 
   const TYPE_SINGER = 'singer'
-
+  const perpage = 20
   export default {
     props: {
       showSinger: {
@@ -38,16 +38,20 @@
     data() {
       return {
         page: 1,
-        result: []
+        result: [],
+        pullup:true,
+        hasMore:true
       }
     },
     methods: {
       //query发生变化时,需要获取后端数据
       search() {
-        search(this.query,this.page,this.showSinger).then((res) => {
+        this.hasMore=true
+        search(this.query,this.page,this.showSinger,perpage).then((res) => {
           if(res.code ===ERR_OK) {
             //将获得的数据进行整理
             this.result=this._genResult(res.data)
+            this._checkMore(res.data)
           }
         })
       },
@@ -77,6 +81,30 @@
         }else{
           //检索结果为歌曲的话 显示歌曲的名字和歌手的名字
           return `${item.songname}-${filterSinger(item.singer)}`
+        }
+      },
+      //当滚动到最下方 需要添加新数据的时候
+      searchMore() {
+        //先进行判断 是否还有数据 若后端没有可展示数据的话 返回
+        if(!this.hasMore) {
+          return
+        }else{
+          //获取下一页的数据 perpage决定了一页有多少个数据
+          this.page++
+          search(this.query,this.page,this.showSinger,perpage).then((res) => {
+            if(res.code ===ERR_OK) {
+              //将获得的数据进行整理
+              this.result=this.result.concat(this._genResult(res.data))
+              //判断hasMore是否存在 当totalnum小于当前此页的数据个数 加上之前的页数*每页的个数时 则已经没有数据可以展示
+              this._checkMore(res.data)
+            }
+          })
+        }
+      },
+      _checkMore(data) {
+        let song = data.song
+        if(!song.list.length || (song.curnum + song.curpage * perpage) > song.totalnum ) {
+          this.hasMore = false
         }
       },
       _normalizeSongs(list) {
