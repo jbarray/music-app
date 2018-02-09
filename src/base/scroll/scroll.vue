@@ -67,7 +67,7 @@
             }
           })
         }
-
+        //监听开始滑动的时候
         if (this.beforeScroll) {
           this.scroll.on('beforeScrollStart', () => {
             this.$emit('beforeScroll')

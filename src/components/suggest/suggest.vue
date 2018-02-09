@@ -1,5 +1,5 @@
 <template>
-  <Scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore">
+  <Scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore" @beforeScroll="listScroll">
     <ul class="suggest-list">
       <li class="suggest-item" v-for="item in result" @click="selectItem(item)">
         <div class="icon">
@@ -41,7 +41,8 @@
         page: 1,
         result: [],
         pullup:true,
-        hasMore:true
+        hasMore:true,
+        beforeScroll:true
       }
     },
     methods: {
@@ -122,6 +123,10 @@
         }else{
           this.insertSong(item)
         }
+      },
+      //scroll开始滑动时 告诉父组件
+      listScroll() {
+        this.$emit('listScroll')
       },
       _normalizeSongs(list) {
         let ret = []

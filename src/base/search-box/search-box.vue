@@ -26,6 +26,10 @@
       },
       setQuery(query) {
         this.query = query
+      },
+      //手机键盘消失
+      changeBlur() {
+        this.$refs.query.blur()
       }
     },
     created() {
