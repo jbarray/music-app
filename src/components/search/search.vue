@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="search-result" v-show="query" ref="searchResult" @listScroll="searchBoxBlur">
-      <suggest :query="query" :showSinger="showSinger"></suggest>
+      <suggest :query="query" :showSinger="showSinger" @clickEvent="saveSearch"></suggest>
     </div>
     <router-view></router-view>
   </div>
@@ -25,6 +25,7 @@ import searchBox from '../../base/search-box/search-box.vue'
 import {getHotKey} from '../../api/search'
 import {ERR_OK} from '../../api/config'
 import suggest from '../suggest/suggest.vue'
+import {mapActions} from 'vuex'
 
   export default {
     data() {
@@ -61,7 +62,15 @@ import suggest from '../suggest/suggest.vue'
       //suggest中的scroll改变时,searchBox的input引发blur,手机键盘消失
       searchBoxBlur() {
         this.$refs.searchBox.changeBlur()
-      }
+      },
+      saveSearch() {
+        this.saveSearchHistory(this.query)
+      },
+      ...mapActions([
+        'saveSearchHistory'
+      ])
+
+
     }
   }
 </script>

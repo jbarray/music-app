@@ -127,6 +127,7 @@
         }else{
           this.insertSong(item)
         }
+        this.$emit('clickEvent')
       },
       //scroll开始滑动时 告诉父组件
       listScroll() {
