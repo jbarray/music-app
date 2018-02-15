@@ -3,13 +3,22 @@
     <searchBox :placeHolder="placeholder" ref="searchBox" @query="onQueryChange"></searchBox>
     <div class="shortcut-wrapper" v-show="!query">
       <div class="shortcut">
-        <div class="hot-key">
+        <div class="hot-key" >
           <h1 class="title">热门搜索</h1>
           <ul>
             <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
               <span>{{item.k}}</span>
             </li>
           </ul>
+        </div>
+        <div class="search-history" v-show="searchHistory.length">
+          <h1 class="title">
+            <span class="text">搜索历史</span>
+            <span class="clear">
+              <i class="icon-clear"></i>
+            </span>
+          </h1>
+          <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory"></search-list>
         </div>
       </div>
     </div>
@@ -25,7 +34,8 @@ import searchBox from '../../base/search-box/search-box.vue'
 import {getHotKey} from '../../api/search'
 import {ERR_OK} from '../../api/config'
 import suggest from '../suggest/suggest.vue'
-import {mapActions} from 'vuex'
+import {mapActions,mapGetters} from 'vuex'
+import searchList from '../../base/search-list/search-list.vue'
 
   export default {
     data() {
@@ -38,7 +48,8 @@ import {mapActions} from 'vuex'
     },
     components:{
       searchBox,
-      suggest
+      suggest,
+      searchList
     },
     created() {
       this._getHotKey()
@@ -65,12 +76,20 @@ import {mapActions} from 'vuex'
       },
       saveSearch() {
         this.saveSearchHistory(this.query)
+        console.log(this.searchHistory)
+      },
+      deleteSearchHistory(item) {
+        this.deleteSearchHistory(item)
       },
       ...mapActions([
-        'saveSearchHistory'
+        'saveSearchHistory',
+        'deleteSearchHistory'
+      ]),
+    },
+    computed:{
+      ...mapGetters([
+        'searchHistory'
       ])
-
-
     }
   }
 </script>
