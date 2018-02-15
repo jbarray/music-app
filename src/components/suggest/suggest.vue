@@ -26,6 +26,7 @@
   import {filterSinger} from '../../common/js/song'
   import Singer from '../../common/js/singer'
   import noResult from '../../base/no-result/no-result.vue'
+//  import createSong from '../../common'
 
   const TYPE_SINGER = 'singer'
   const perpage = 20
@@ -68,10 +69,20 @@
           ret.push({...data.zhida, ...{type:TYPE_SINGER}})
         }
         if(data.song) {
+//          ret=ret.concat(this._normalizeSongs(data.song.list))
           ret=ret.concat(data.song.list)
         }
         return ret
       },
+//      _normalizeSongs(list) {
+//        let ret = []
+//        list.forEach((musicData) => {
+//          if (musicData.songid && musicData.albummid) {
+//            ret.push(createSong(musicData))
+//          }
+//        })
+//        return ret
+//      },
       //检索结果 根据检索结果的不同,区分class 从而显示不同的logo
       getIconCls(item) {
         if(item.type === TYPE_SINGER) {
@@ -120,12 +131,13 @@
             id: item.singermid,
             name: item.singername
           })
-        this.$router.push({
-          path:`/search/${singer.id}`
-        })
-        this.setSinger(singer)
+          this.$router.push({
+            path: `/search/${singer.id}`
+          })
+          this.setSinger(singer)
         }else{
-          this.insertSong(item)
+          console.log("遗漏点击歌曲播放问题")
+//          this.insertSong(item)
         }
         this.$emit('clickEvent')
       },
