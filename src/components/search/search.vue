@@ -14,7 +14,7 @@
         <div class="search-history" v-show="searchHistory.length">
           <h1 class="title">
             <span class="text">搜索历史</span>
-            <span class="clear">
+            <span class="clear" @click="clear">
               <i class="icon-clear"></i>
             </span>
           </h1>
@@ -25,6 +25,7 @@
     <div class="search-result" v-show="query" ref="searchResult" @listScroll="searchBoxBlur">
       <suggest :query="query" :showSinger="showSinger" @clickEvent="saveSearch"></suggest>
     </div>
+    <confirm ref="confirm" @confirm="clearSearchHistory" text="是否清空所有搜索历史" confirmBtnText="清空"></confirm>
     <router-view></router-view>
   </div>
 </template>
@@ -36,6 +37,7 @@ import {ERR_OK} from '../../api/config'
 import suggest from '../suggest/suggest.vue'
 import {mapActions,mapGetters} from 'vuex'
 import searchList from '../../base/search-list/search-list.vue'
+import confirm from '../../base/confirm/confirm.vue'
 
   export default {
     data() {
@@ -49,7 +51,8 @@ import searchList from '../../base/search-list/search-list.vue'
     components:{
       searchBox,
       suggest,
-      searchList
+      searchList,
+      confirm
     },
     created() {
       this._getHotKey()
@@ -85,6 +88,10 @@ import searchList from '../../base/search-list/search-list.vue'
         'saveSearchHistory',
         'deleteSearchHistory'
       ]),
+      //点击垃圾筐 出现弹窗
+      clear() {
+        this.$refs.confirm.show()
+      }
     },
     computed:{
       ...mapGetters([
