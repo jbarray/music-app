@@ -1,5 +1,5 @@
 <template>
-  <Scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore" @beforeScroll="listScroll">
+  <Scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore" @beforeScroll="listScroll" ref="suggest">
     <ul class="suggest-list">
       <li class="suggest-item" v-for="item in result" @click="selectItem(item)">
         <div class="icon">
@@ -155,7 +155,10 @@
       }),
       ...mapActions({
         insertSong:'insertSong'
-      })
+      }),
+      refresh() {
+        this.$refs.suggest.refresh()
+      }
     },
     watch: {
       query(newQuery) {

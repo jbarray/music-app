@@ -1,8 +1,9 @@
 <template>
   <div class="search">
     <searchBox :placeHolder="placeholder" ref="searchBox" @query="onQueryChange"></searchBox>
-    <div class="shortcut-wrapper" v-show="!query">
-      <div class="shortcut">
+    <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
+      <Scroll :data="shortcut" class="shortcut" ref="shortcut">
+        <div >
         <div class="hot-key" >
           <h1 class="title">热门搜索</h1>
           <ul>
@@ -21,9 +22,10 @@
           <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory"></search-list>
         </div>
       </div>
+      </Scroll>
     </div>
     <div class="search-result" v-show="query" ref="searchResult" @listScroll="searchBoxBlur">
-      <suggest :query="query" :showSinger="showSinger" @clickEvent="saveSearch"></suggest>
+      <suggest :query="query" :showSinger="showSinger" @clickEvent="saveSearch" ref="suggest"></suggest>
     </div>
     <confirm ref="confirm" @confirm="clearSearchHistory" text="是否清空所有搜索历史" confirmBtnText="清空"></confirm>
     <router-view></router-view>
@@ -38,8 +40,11 @@ import suggest from '../suggest/suggest.vue'
 import {mapActions,mapGetters} from 'vuex'
 import searchList from '../../base/search-list/search-list.vue'
 import confirm from '../../base/confirm/confirm.vue'
+import Scroll from '../../base/scroll/scroll.vue'
+import {playlistMixin} from '../../common/js/mixin'
 
   export default {
+  mixins: [playlistMixin],
     data() {
       return {
         placeholder:'搜索歌曲,歌手',
@@ -52,7 +57,8 @@ import confirm from '../../base/confirm/confirm.vue'
       searchBox,
       suggest,
       searchList,
-      confirm
+      confirm,
+      Scroll
     },
     created() {
       this._getHotKey()
@@ -91,13 +97,34 @@ import confirm from '../../base/confirm/confirm.vue'
       //点击垃圾筐 出现弹窗
       clear() {
         this.$refs.confirm.show()
+      },
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '60px' : ''
+
+        this.$refs.searchResult.style.bottom = bottom
+        this.$refs.suggest.refresh()
+
+        this.$refs.shortcutWrapper.style.bottom = bottom
+        this.$refs.shortcut.refresh()
       }
     },
     computed:{
       ...mapGetters([
         'searchHistory'
-      ])
-    }
+      ]),
+      shortcut() {
+        return this.hotKey.concat(this.searchHistory)
+      }
+    },
+    watch: {
+      query(newQuery) {
+        if (!newQuery) {
+          setTimeout(() => {
+            this.$refs.shortcut.refresh()
+          }, 20)
+        }
+      }
+    },
   }
 </script>
 
