@@ -6,7 +6,7 @@
           <p class="text">{{text}}</p>
           <div class="operate">
             <div @click="cancelData" class="operate-btn left">{{cancelBtnText}}</div>
-            <div  class="operate-btn">{{confirmBtnText}}</div>
+            <div @click="confirmData" class="operate-btn">{{confirmBtnText}}</div>
           </div>
         </div>
       </div>
@@ -46,10 +46,10 @@
         this.hide()
         this.$emit('cancel')
       },
-//      confirmData() {
-//        this.hide()
-//        this.$emit('confirm')
-//      }
+      confirmData() {
+        this.hide()
+        this.$emit('confirm')
+      }
     }
   }
 </script>

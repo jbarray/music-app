@@ -79,14 +79,14 @@ import confirm from '../../base/confirm/confirm.vue'
       },
       saveSearch() {
         this.saveSearchHistory(this.query)
-        console.log(this.searchHistory)
       },
       deleteSearchHistory(item) {
         this.deleteSearchHistory(item)
       },
       ...mapActions([
         'saveSearchHistory',
-        'deleteSearchHistory'
+        'deleteSearchHistory',
+        'clearSearchHistory'
       ]),
       //点击垃圾筐 出现弹窗
       clear() {
