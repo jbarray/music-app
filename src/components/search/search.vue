@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+  <script type="text/ecmascript-6">
 import searchBox from '../../base/search-box/search-box.vue'
 import {getHotKey} from '../../api/search'
 import {ERR_OK} from '../../api/config'

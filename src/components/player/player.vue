@@ -139,6 +139,7 @@
         </div>
       </div>
     </transition>
+    <playlist></playlist>
     <!--播放音乐-->
     <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="dateTimeup" @ended="end"></audio>
   </div>
@@ -152,6 +153,7 @@ import progressBar  from '../../base/progress-bar/progress-bar.vue'
 import {playMode} from '../../common/js/config'
 import {shuffle} from '../../common/js/utill'
 import {getLyric} from '../../api/song'
+import playlist from '../playlist/playlist.vue'
   export default {
 
     data() {
@@ -362,7 +364,8 @@ import {getLyric} from '../../api/song'
       }
     },
     components: {
-      progressBar
+      progressBar,
+      playlist
     }
   }
 </script>
