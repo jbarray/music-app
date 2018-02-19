@@ -134,12 +134,12 @@
         <div class="control">
           <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
         </div>
-        <div class="control">
+        <div class="control" @click="showPlaylist">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
-    <playlist></playlist>
+    <playlist ref="playlist"></playlist>
     <!--播放音乐-->
     <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="dateTimeup" @ended="end"></audio>
   </div>
@@ -341,6 +341,10 @@ import playlist from '../playlist/playlist.vue'
       //歌词和照片的切换
       changeLyric() {
           this.pictureShow = !this.pictureShow
+      },
+      //点击mini播放器中的播放列表图标,出现播放列表
+      showPlaylist() {
+        this.$refs.playlist.show()
       }
     },
     watch:{

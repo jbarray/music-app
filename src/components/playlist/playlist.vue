@@ -1,6 +1,6 @@
 <template>
   <transition name="list-fade">
-    <div class="playlist">
+    <div class="playlist" v-show="showFlag" @click="hide">
       <div class="list-wrapper">
         <div class="list-header">
           <h1 class="title">
@@ -9,21 +9,21 @@
             <span class="clear"><i class="icon-clear"></i></span>
           </h1>
         </div>
-        <div class="list-content">
+        <Scroll :data="sequenceList" ref="listContent" class="list-content">
           <ul>
-            <li  class="item">
+            <li  class="item" v-for="item in sequenceList">
                 <!--@click="selectItem(item,index)">-->
-              <i class="current" ></i>
-              <span class="text"></span>
+              <i class="current" :class="getCurrentIcon(item)"></i>
+              <span class="text">{{item.name}}</span>
               <span class="like">
-                <i ></i>
+                <i class="icon-not-favorite"></i>
               </span>
               <span  class="delete">
                 <i class="icon-delete"></i>
               </span>
             </li>
           </ul>
-        </div>
+        </Scroll>
         <div class="list-operate">
           <div class="add">
             <i class="icon-add"></i>
@@ -41,9 +41,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-//  import {mapActions} from 'vuex'
+  import {mapGetters} from 'vuex'
 //  import {playMode} from 'common/js/config'
-//  import Scroll from 'base/scroll/scroll'
+  import Scroll from '../../base/scroll/scroll'
 //  import Confirm from 'base/confirm/confirm'
 //  import AddSong from 'components/add-song/add-song'
 //  import {playerMixin} from 'common/js/mixin'
@@ -56,24 +56,36 @@
       }
     },
     computed: {
-
+      ...mapGetters([
+        'sequenceList',
+        'currentSong'
+      ])
     },
     methods: {
       show() {
         this.showFlag = true
-//        setTimeout(() => {
-//          this.$refs.listContent.refresh()
+        setTimeout(() => {
+          this.$refs.listContent.refresh()
 //          this.scrollToCurrent(this.currentSong)
-//        }, 20)
+        }, 20)
       },
       hide() {
         this.showFlag = false
       },
+      getCurrentIcon(item){
+        if(item.id === this.currentSong.id) {
+          return 'icon-play'
+        }else{
+          return ''
+        }
+      }
+
     },
     watch: {
 
     },
     components: {
+      Scroll
     }
   }
 </script>
