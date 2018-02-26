@@ -1,6 +1,6 @@
 <template>
   <div class="player" >
-  <div class="player" v-show="playlist.length>0">
+  <!--<div class="player" v-show="playlist.length>0">-->
     <transition name="normal"
     @enter="enter"
     @after-enter="afterEnter"
@@ -143,7 +143,7 @@
     <!--播放音乐-->
     <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="dateTimeup" @ended="end"></audio>
   </div>
-  </div>
+  <!--</div>-->
 </template>
 
 <script type="text/ecmascript-6">
