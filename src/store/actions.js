@@ -1,7 +1,7 @@
 import * as types from './mutation-types'
 import {playMode} from '../common/js/config'
 import {shuffle} from '../common/js/utill'
-import {saveSearch,deleteSearch,clearSearch} from '../common/js/cache'
+import {saveSearch,deleteSearch,clearSearch } from '../common/js/cache'
 
 function checkAdult(item,song) {
   while(id === song.id) {
@@ -96,4 +96,28 @@ export const deleteSearchHistory = function ({commit},query) {
 
 export const clearSearchHistory = function ({commit}) {
   commit(types.SET_SEARCH_HISTORY,clearSearch())
+}
+
+export const deleteSong = function ({commit, state}, item) {
+  let playlist = state.playlist.slice(0)
+  let sequenceList = state.sequenceList.slice(0)
+  let currentIndex = state.currentIndex
+  const pIndex = findIndex(playlist, item)
+  playlist.splice(pIndex,1);
+  //修改sequenceList
+  const sIndex = findIndex(sequenceList, item)
+  sequenceList.splice(sIndex,1);
+  console.log('pIndex'+pIndex)
+  if(currentIndex > pIndex ||currentIndex === playlist.length) {
+    currentIndex--;
+  }
+
+  commit(types.SET_PLAYLIST,playlist)
+  commit(types.SET_SEQUENCE_LIST,sequenceList)
+  commit(types.SET_CURRENT_INDEX,currentIndex)
+
+  //如果全部删完,设置播放状态为暂停
+  if(!playlist.length) {
+    commit(types.SET_PLAYING_STATE, false)
+  }
 }
