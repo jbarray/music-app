@@ -353,6 +353,9 @@ import playlist from '../playlist/playlist.vue'
       //当currentSong发生改变的时候,开始播放此歌曲
       currentSong(newSong,oldSong) {
         // 如果song变化前后 是同一首歌 则保持当前状态不变(如:播放状态)
+        if(!newSong) {
+          return
+        }
         if (newSong.id === oldSong.id) {
           return
         }
