@@ -1,6 +1,6 @@
 <template>
   <transition name="list-fade">
-    <div class="playlist" v-show="showFlag" @click="hide">
+    <div class="playlist" v-show="showFlag">
       <div class="list-wrapper">
         <div class="list-header">
           <h1 class="title">
@@ -11,7 +11,7 @@
         </div>
         <Scroll :data="sequenceList" ref="listContent" class="list-content">
           <ul>
-            <li  class="item" v-for="item in sequenceList">
+            <li  class="item" v-for="(item,index) in sequenceList" @click="changeCurrentIndex(item, index)" ref="list">
                 <!--@click="selectItem(item,index)">-->
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
@@ -19,8 +19,8 @@
                 <i class="icon-not-favorite"></i>
               </span>
               <span  class="delete">
-                <i class="icon-delete"></i>
               </span>
+                <i class="icon-delete"></i>
             </li>
           </ul>
         </Scroll>
@@ -30,7 +30,7 @@
             <span class="text">添加歌曲到队列</span>
           </div>
         </div>
-        <div class="list-close">
+        <div class="list-close"  @click="hide">
           <span>关闭</span>
         </div>
       </div>
@@ -41,8 +41,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapGetters} from 'vuex'
-//  import {playMode} from 'common/js/config'
+  import {mapGetters, mapMutations} from 'vuex'
+  import {playMode} from '../../common/js/config'
   import Scroll from '../../base/scroll/scroll'
 //  import Confirm from 'base/confirm/confirm'
 //  import AddSong from 'components/add-song/add-song'
@@ -58,10 +58,25 @@
     computed: {
       ...mapGetters([
         'sequenceList',
-        'currentSong'
+        'currentSong',
+        'mode'
       ])
     },
+    created() {
+      this.scrollToCurrentSong(this.currentSong);
+    },
+    watch:{
+      // 当前播放歌曲发生改变时,当前歌曲置顶
+      currentSong(newSong, oldSong){
+        if( !this.showFlag || newSong === oldSong) {
+          return
+        }else{
+          this.scrollToCurrentSong(newSong)
+        }
+      }
+    },
     methods: {
+      ...mapMutations({setCurrentIndex:'SET_CURRENT_INDEX', setPlayingState:'SET_PLAYING_STATE'}),
       show() {
         this.showFlag = true
         setTimeout(() => {
@@ -78,11 +93,27 @@
         }else{
           return ''
         }
+      },
+
+      // 点击歌曲列表中其他歌曲 切换当前播放歌曲 播放状态为播放
+      changeCurrentIndex(item, index) {
+        //当前播放模式为随机播放的话 要从playlist中找到currentsong的index值
+        if(this.mode === playMode.random) {
+          index = this.playlist.findIndex((song) => {
+            return song.id = item.id
+          })
+        }
+        this.setCurrentIndex(index);
+        this.setPlayingState(true);
+      },
+
+      // 当前播放歌曲位于列表最顶部
+      scrollToCurrentSong(item) {
+        const index = this.sequenceList.findIndex((song) => {
+          return item.id === song.id
+        })
+        this.$refs.listContent.scrollToElement(this.$refs.list[index],300);
       }
-
-    },
-    watch: {
-
     },
     components: {
       Scroll
