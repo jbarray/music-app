@@ -1,5 +1,5 @@
 <template>
-  <div class="player" >
+  <div class="player" v-show="playlist.length>0">
   <!--<div class="player" v-show="playlist.length>0">-->
     <transition name="normal"
     @enter="enter"
@@ -164,6 +164,16 @@ import playlist from '../playlist/playlist.vue'
       }
     },
     computed: {
+      ...mapGetters([
+        'currentIndex',
+        'fullScreen',
+        'playing',
+        'currentSong',
+        'playlist',
+        'mode',
+        'sequenceList'
+      ]),
+
       // 点击播放按钮 改变图标样式
       playIcon() {
         return this.playing ? 'icon-pause' : 'icon-play'
@@ -185,22 +195,14 @@ import playlist from '../playlist/playlist.vue'
       iconMode() {
         return this.mode === playMode.sequence? 'icon-sequence' : this.mode === playMode.loop? 'icon-loop' : 'icon-random'
       },
-      ...mapGetters([
-        'currentIndex',
-        'fullScreen',
-        'playing',
-        'currentSong',
-        'playlist',
-        'mode',
-        'sequenceList'
-      ])
     },
     created() {
 //      getLyric(this.currentSong.mid).then((rep) =>{
 //        console.log(rep)
 //      })
     },
-    methods:{//      ...mapActions([
+    methods:{
+      //      ...mapActions([
 //        'savePlayHistory'
 //      ]),
 //      修改vuex中的值
