@@ -1,7 +1,7 @@
 import * as types from './mutation-types'
 import {playMode} from '../common/js/config'
 import {shuffle} from '../common/js/utill'
-import {saveSearch,deleteSearch,clearSearch } from '../common/js/cache'
+import {saveSearch,deleteSearch,clearSearch, savePlay } from '../common/js/cache'
 
 function checkAdult(item,song) {
   while(id === song.id) {
@@ -107,7 +107,6 @@ export const deleteSong = function ({commit, state}, item) {
   //修改sequenceList
   const sIndex = findIndex(sequenceList, item)
   sequenceList.splice(sIndex,1);
-  console.log('pIndex'+pIndex)
   if(currentIndex > pIndex ||currentIndex === playlist.length) {
     currentIndex--;
   }
@@ -120,4 +119,16 @@ export const deleteSong = function ({commit, state}, item) {
   if(!playlist.length) {
     commit(types.SET_PLAYING_STATE, false)
   }
+}
+
+export const deleteSongList = function ({commit}){
+  commit(types.SET_PLAYLIST, [])
+  commit(types.SET_SEQUENCE_LIST, [])
+  commit(types.SET_CURRENT_INDEX, -1)
+  commit(types.SET_PLAYING_STATE, false)
+}
+
+export const savePlayHistory=function({commit}, song){
+   const playHistory = savePlay(song)
+   commit(types.SET_PLAY_HISTORY, playHistory)
 }

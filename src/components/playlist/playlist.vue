@@ -4,28 +4,28 @@
       <div class="list-wrapper">
         <div class="list-header">
           <h1 class="title">
-            <i class="icon" ></i>
-            <span class="text"></span>
-            <span class="clear"><i class="icon-clear"></i></span>
+            <i class="icon" :class="iconMode" @click="changeMode"></i>
+            <span class="text">{{modeText}}</span>
+            <span class="clear"  @click="confirmShow"><i class="icon-clear"></i></span>
           </h1>
         </div>
         <Scroll :data="sequenceList" ref="listContent" class="list-content">
-          <ul>
-            <li  class="item" v-for="(item,index) in sequenceList" @click="changeCurrentIndex(item, index)" ref="list">
+          <transition-group name="list" tag="ul">
+            <li :key="item.id" class="item" v-for="(item,index) in sequenceList" @click="changeCurrentIndex(item, index)" ref="list">
                 <!--@click="selectItem(item,index)">-->
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
               <span class="like">
                 <i class="icon-not-favorite"></i>
               </span>
-              <span  class="delete">
+              <span  class="delete" @click.stop="deleteOne(item)">
               </span>
                 <i class="icon-delete"></i>
             </li>
-          </ul>
+          </transition-group>
         </Scroll>
         <div class="list-operate">
-          <div class="add">
+          <div class="add" @click="showAddSong">
             <i class="icon-add"></i>
             <span class="text">添加歌曲到队列</span>
           </div>
@@ -34,33 +34,31 @@
           <span>关闭</span>
         </div>
       </div>
-      <!--<confirm ref="confirm" @confirm="confirmClear" text="是否清空播放列表" confirmBtnText="清空"></confirm>-->
-      <!--<add-song ref="addSong"></add-song>-->
+      <confirm ref="confirm" @confirm="confirmClear" text="是否清空播放列表" confirmBtnText="清空"></confirm>
+      <add-song ref="addSong"></add-song>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapGetters, mapMutations} from 'vuex'
+  import {mapActions} from 'vuex'
   import {playMode} from '../../common/js/config'
   import Scroll from '../../base/scroll/scroll'
-//  import Confirm from 'base/confirm/confirm'
-//  import AddSong from 'components/add-song/add-song'
-//  import {playerMixin} from 'common/js/mixin'
+  import Confirm from '../../base/confirm/confirm'
+  import AddSong from '../../components/add-song/add-song'
+  import {playerMixin} from '../../common/js/mixin'
 
   export default {
-//    mixins: [playerMixin],
+    mixins: [playerMixin],
     data() {
       return {
         showFlag: false,
       }
     },
     computed: {
-      ...mapGetters([
-        'sequenceList',
-        'currentSong',
-        'mode'
-      ])
+      modeText() {
+        return this.mode === playMode.sequence? '顺序播放' : this.mode === playMode.random? '随机播放': '单曲循环'
+      }
     },
     created() {
       this.scrollToCurrentSong(this.currentSong);
@@ -76,12 +74,12 @@
       }
     },
     methods: {
-      ...mapMutations({setCurrentIndex:'SET_CURRENT_INDEX', setPlayingState:'SET_PLAYING_STATE'}),
+      ...mapActions(['deleteSong','deleteSongList']),
       show() {
         this.showFlag = true
         setTimeout(() => {
-          this.$refs.listContent.refresh()
-//          this.scrollToCurrent(this.currentSong)
+          this.$refs.listContent.refresh();
+          this.scrollToCurrentSong(this.currentSong);
         }, 20)
       },
       hide() {
@@ -113,10 +111,38 @@
           return item.id === song.id
         })
         this.$refs.listContent.scrollToElement(this.$refs.list[index],300);
-      }
+//        this.$refs.listContent.scrollToElement(this.$refs.list.$el.children[index], 300)
+      },
+
+      //单个歌曲点击删除
+      deleteOne(item){
+        this.deleteSong(item)
+        if(!this.playlist) {
+          this.hide()
+        }
+      },
+
+      //点击清空按钮
+      confirmShow(){
+        this.$refs.confirm.show();
+      },
+      //点击确认页面的清空
+      confirmClear() {
+        this.deleteSongList();
+        //隐藏playlist
+        this.hide();
+      },
+
+      //打开添加歌曲页面
+      showAddSong() {
+        this.$refs.addSong.show();
+      },
+
     },
     components: {
-      Scroll
+      Scroll,
+      Confirm,
+      AddSong
     }
   }
 </script>

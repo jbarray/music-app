@@ -36,20 +36,19 @@ import searchBox from '../../base/search-box/search-box.vue'
 import {getHotKey} from '../../api/search'
 import {ERR_OK} from '../../api/config'
 import suggest from '../suggest/suggest.vue'
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions} from 'vuex'
 import searchList from '../../base/search-list/search-list.vue'
 import confirm from '../../base/confirm/confirm.vue'
 import Scroll from '../../base/scroll/scroll.vue'
-import {playlistMixin} from '../../common/js/mixin'
+import {playlistMixin, searchMixin} from '../../common/js/mixin'
 
 export default {
-  mixins: [playlistMixin],
+  mixins: [playlistMixin, searchMixin],
   data () {
     return {
       placeholder: '搜索歌曲,歌手',
       hotKey: [],
       showSinger: true,
-      query: null
     }
   },
   components: {
@@ -71,26 +70,13 @@ export default {
        }
       })
     },
-    //点击热门数据 搜索框中出现该词
-    addQuery (query) {
-      this.$refs.searchBox.setQuery(query)
-    },
-    onQueryChange(data) {
-      this.query=data
-    },
-    //suggest中的scroll改变时,searchBox的input引发blur,手机键盘消失
-    searchBoxBlur() {
-      this.$refs.searchBox.changeBlur()
-    },
-    saveSearch() {
-      this.saveSearchHistory(this.query)
-    },
+
     deleteSearchHistory(item) {
       this.deleteSearchHistory(item)
     },
     ...mapActions([
-      'saveSearchHistory',
-      'deleteSearchHistory',
+//      'saveSearchHistory',
+//      'deleteSearchHistory',
       'clearSearchHistory'
     ]),
     //  点击垃圾筐 出现弹窗
@@ -113,9 +99,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'searchHistory'
-    ]),
     shortcut () {
       return this.hotKey.concat(this.searchHistory)
     }

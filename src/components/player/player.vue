@@ -1,6 +1,5 @@
 <template>
   <div class="player" v-show="playlist.length>0">
-  <!--<div class="player" v-show="playlist.length>0">-->
     <transition name="normal"
     @enter="enter"
     @after-enter="afterEnter"
@@ -147,15 +146,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {mapGetters,mapMutations} from 'vuex'
+import {mapGetters,mapMutations, mapActions} from 'vuex'
 import animations from 'create-keyframe-animation'
 import progressBar  from '../../base/progress-bar/progress-bar.vue'
 import {playMode} from '../../common/js/config'
 import {shuffle} from '../../common/js/utill'
 import {getLyric} from '../../api/song'
 import playlist from '../playlist/playlist.vue'
+import {playerMixin} from '../../common/js/mixin'
   export default {
-
+    mixins:[playerMixin],
     data() {
       return {
         songPlay:false,
@@ -168,10 +168,9 @@ import playlist from '../playlist/playlist.vue'
         'currentIndex',
         'fullScreen',
         'playing',
-        'currentSong',
         'playlist',
-        'mode',
-        'sequenceList'
+//        'mode',
+//        'sequenceList'
       ]),
 
       // 点击播放按钮 改变图标样式
@@ -191,10 +190,6 @@ import playlist from '../playlist/playlist.vue'
       percent() {
         return this.currentTime/this.currentSong.duration
       },
-      //更改播放样式的图标 ,即更改其class
-      iconMode() {
-        return this.mode === playMode.sequence? 'icon-sequence' : this.mode === playMode.loop? 'icon-loop' : 'icon-random'
-      },
     },
     created() {
 //      getLyric(this.currentSong.mid).then((rep) =>{
@@ -202,9 +197,12 @@ import playlist from '../playlist/playlist.vue'
 //      })
     },
     methods:{
-      //      ...mapActions([
-//        'savePlayHistory'
-//      ]),
+      ...mapMutations({
+        setFullScreen: 'SET_FULL_SCREEN',
+      }),
+      ...mapActions([
+        'savePlayHistory'
+      ]),
 //      修改vuex中的值
       back() {
         this.setFullScreen(false)
@@ -263,16 +261,11 @@ import playlist from '../playlist/playlist.vue'
         this.setPlayingState(!this.playing)
 //        this.songPlay=false
       },
-      ...mapMutations({
-        setFullScreen: 'SET_FULL_SCREEN',
-        setPlayingState:'SET_PLAYING_STATE',
-        setCurrentIndex:'SET_CURRENT_INDEX',
-        setPlayMode:'SET_PLAY_MODE',
-        setPlayList:'SET_PLAYLIST'
-      }),
       //保证不能频繁点击 标志位歌曲已经准备好的时候canplay=ready才可以点
       ready() {
         this.songPlay=true
+        //存储当前播放的歌曲
+        this.savePlayHistory(this.playlist[this.currentIndex])
       },
       error() {
         this.songPlay=true
@@ -317,23 +310,7 @@ import playlist from '../playlist/playlist.vue'
           this.togglePlaying()
         }
       },
-      //点击 播放模式按钮 ,会改变vuex中mode的值
-      changeMode() {
-       const mode = (this.mode+1)%3
-        this.setPlayMode(mode)
-        //歌曲播放模式改变的主要是歌曲播放列表,随机播放时列表和其他两个模式的不同
-        let list = null
-        if(mode === playMode.random) {
-         // 打破重组playList
-          list = shuffle(this.sequenceList)
-        }else{
-         list = this.sequenceList
-        }
-        //修改播放列表时,currentIndex不发生改变,即当前歌曲不改变
-        this.resetCurrentIndex(list)
-        //修改播放列表
-        this.setPlayList(list)
-      },
+
       resetCurrentIndex(arr) {
         let index = arr.findIndex((item) => {
           return item.id === this.currentSong.id
