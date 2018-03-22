@@ -1,7 +1,7 @@
 <template>
   <div class="search-list" v-show="searches.length">
     <ul>
-      <li  class="search-item" @click="selectItem(item)" v-for="item in searches">
+      <li  class="search-item" @click="selectItem(item)" v-for="item in searches" :class="{'searchList':changeMargin}">
         <span class="text">{{item}}</span>
         <span class="icon" @click.stop="deleteOne(item)">
           <i class="icon-delete"></i>
@@ -17,6 +17,10 @@
       searches: {
         type: Array,
         default: []
+      },
+      changeMargin:{
+        type: Boolean,
+        default: false
       }
     },
     methods: {
@@ -38,6 +42,7 @@
       display: flex
       align-items: center
       height: 40px
+      /*margin: 0 20px*/
       overflow: hidden
       &.list-enter-active, &.list-leave-active
         transition: all 0.1s
@@ -51,4 +56,6 @@
         .icon-delete
           font-size: $font-size-small
           color: $color-text-d
+      &.searchList
+        margin:0 30px
 </style>
