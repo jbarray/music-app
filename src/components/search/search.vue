@@ -3,7 +3,7 @@
     <searchBox :placeHolder="placeholder" ref="searchBox" @query="onQueryChange"></searchBox>
     <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
       <!--scroll的数据=热门搜索数据+搜索历史数据-->
-      <scroll :data="shortcut" class="shortcut" ref="shortcut">
+      <scroll :data="shortcut" class="shortcut" ref="shortcut" :refreshDelay="refreshDelay">
         <div>
           <div class="hot-key" >
             <h1 class="title">热门搜索</h1>

@@ -9,7 +9,7 @@
             <span class="clear"  @click="confirmShow"><i class="icon-clear"></i></span>
           </h1>
         </div>
-        <Scroll :data="sequenceList" ref="listContent" class="list-content">
+        <Scroll :data="sequenceList" ref="listContent" class="list-content" :refreshDelay="refreshDelay">
           <transition-group name="list" tag="ul">
             <li :key="item.id" class="item" v-for="(item,index) in sequenceList" @click="changeCurrentIndex(item, index)" ref="list">
                 <!--@click="selectItem(item,index)">-->
@@ -53,6 +53,7 @@
     data() {
       return {
         showFlag: false,
+        refreshDelay:100,
       }
     },
     computed: {
