@@ -22,8 +22,8 @@
                  <img v-lazy="item.imgurl" width="60" height="60">
                </div>
                <div class="text">
-                 <h2 class="name">{{item.creator.name}}</h2>
-                 <p class="desc" v-html="item.dissname"></p>
+                 <h2 class="name">{{item.name}}</h2>
+                 <p class="desc" v-html="item.discname"></p>
                </div>
              </li>
            </ul>
@@ -52,7 +52,38 @@
     data(){
       return {
         recommends:[],
-        discList: []
+        discList: [
+          {
+            imgurl:'http://p.qpic.cn/music_cover/ibSiagqKjw1zfTgxY7F8CfExCiaWEgEcI9eWeJeWHkzAP9Uib0Ckuibmg0w/600?n=1',
+            name:'每日新歌：Alan Walker助阵电影热单',
+            discname:'播放量:27.1万'
+          },
+          {
+            imgurl:'http://p.qpic.cn/music_cover/JBDCVgqXWXaYUvcsElqcicfrInhQexsibQJWL7vT2qXbavytWofjmTCQ/600?n=1',
+            name:'郁可唯终极补位，《歌手》第10期原唱抢先听',
+            discname:'播放量:9.8万'
+          },
+          {
+            imgurl:'http://p.qpic.cn/music_cover/MhQ4bJBPt3Yt5icXyBGNhyHicia4ZVAqggkibps6M4fmz5ibZerm0SOR4lw/600?n=1',
+            name:'生物老师最爱的歌单，简直是动物大全',
+            discname:'播放量:33.6万'
+          },
+          {
+            imgurl:'http://p.qpic.cn/music_cover/RrXobiciaW7sU0htwoU8XrKNbXCsUUNXYpLbSQad0oa8Pxm4NYpTicauQ/600?n=1',
+            name:'这些歌手的低音可以有多低？',
+            discname:'播放量:53.7万'
+          },
+          {
+            imgurl:'http://p.qpic.cn/music_cover/hSqULWEBYJEo7iaPyicuhTvRxtnXv8HEntGQxE0aPSFIEjMQP2qYk5Xw/600?n=1',
+            name:'柏林爱乐：古典最高演奏水准乐团',
+            discname:'播放量:34.7万'
+          },
+          {
+            imgurl:'http://p.qpic.cn/music_cover/Ay2w92PeiaO57pZWMwecv6cqfHRc71Uiah6M0HXJYia9RQyOIcDt7K8Ug/600?n=1',
+            name:'自然纯音：雨季/浪潮/鸟蝉/风铃/',
+            discname:'播放量:20.9万'
+          },
+        ]
       }
     },
     components:{
@@ -62,17 +93,13 @@
     },
     created() {
       this._getRecommend()
-       this. _getDiscList()
+//       this. _getDiscList()
     },
     methods: {
       //mini播放器的引入及适配
       handlePlaylist(playlist) {
-        if(playlist) {
-          var bottom = '60px'
-        }
-        else{
-          bottom = ''
-        }
+        const bottom = playlist.length > 0 ? '60px' : ''
+
         this.$refs.recommend.style.bottom = bottom
         this.$refs.scroll.refresh()
       },
@@ -83,14 +110,13 @@
           }
         })
       },
-      _getDiscList() {
-        getDiscList().then((res) => {
-          if (res.code === ERR_OK) {
-            this.discList = res.data.list
-            console.log(this.discList);
-          }
-        })
-      },
+//      _getDiscList() {
+//        getDiscList().then((res) => {
+//          if (res.code === ERR_OK) {
+//            this.discList = res.data.list
+//          }
+//        })
+//      },
       loadImage() {
         if(!this.checkLoaded){
           this.$refs.scroll.refresh()
@@ -124,6 +150,7 @@
         width: 100%
         overflow: hidden
       .recommend-list
+        position: relative
         .list-title
           height: 65px
           line-height: 65px
@@ -152,9 +179,9 @@
               color:  $color-text
             .desc
               color:  $color-text-d
-      .loading-container
-        position: absolute
-        width: 100%
-        top: 50%
-        transform: translateY(-50%)
+        .loading-container
+          position: absolute
+          width: 100%
+          top: 50%
+          transform: translateY(-50%)
 </style>

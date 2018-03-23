@@ -27,7 +27,7 @@
         <div class="list-operate">
           <div class="add" @click="showAddSong">
             <i class="icon-add"></i>
-            <span class="text">添加歌曲到队列</span>
+            <span class="text">添加歌曲到列表</span>
           </div>
         </div>
         <div class="list-close"  @click="hide">
@@ -75,7 +75,7 @@
       }
     },
     methods: {
-      ...mapActions(['deleteSong','deleteSongList']),
+      ...mapActions(['deleteSong','deleteSongList','playlist']),
       show() {
         this.showFlag = true
         setTimeout(() => {
