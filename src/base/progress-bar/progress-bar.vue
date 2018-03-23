@@ -65,7 +65,7 @@ const transform = prefixStyle('transform')
         this._togglePercent()
       },
       touchProgressBar(e) {
-        const react = this.$refs.progressBtn.getBoundingClientRect()
+        const react = this.$refs.progressBar.getBoundingClientRect()
         const offsetWidth = e.pageX - react.left
         this._upset(offsetWidth)
 //        this._upset(e.offsetX)
