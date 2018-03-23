@@ -35,7 +35,8 @@ export const playerMixin = ({
     ...mapGetters([
       'mode',
       'sequenceList',
-      'currentSong',])
+      'currentSong',
+      'favoriteList'])
   },
   methods: {
     //点击 播放模式按钮 ,会改变vuex中mode的值
@@ -63,6 +64,31 @@ export const playerMixin = ({
       this.setCurrentIndex(index)
     },
 
+    //是否喜欢 转换class(更改样式)&判定是否已收藏,进行相应操作
+    isFavorite(song) {
+      if(this.hasSaveFavorite(song)){
+        return 'icon-favorite'
+      }
+      return 'icon-not-favorite'
+    },
+    changeFavoriteMode(song){
+      if(this.hasSaveFavorite(song)){
+        this.deleteFavoriteHistory(song)
+      }else {
+        this.saveFavoriteHistory(song)
+      }
+    },
+    //判定现有favoriteList中是否有此歌曲
+    hasSaveFavorite(song) {
+      const index = this.favoriteList.findIndex((item)=>{
+        return song.id === item.id
+      })
+      return index>-1
+    },
+    ...mapActions([
+      'saveFavoriteHistory',
+      'deleteFavoriteHistory'
+    ]),
     ...mapMutations({
       setPlayMode: 'SET_PLAY_MODE',
       setPlayList: 'SET_PLAYLIST',
@@ -107,3 +133,4 @@ export const searchMixin = ({
     ])
   }
 })
+

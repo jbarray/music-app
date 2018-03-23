@@ -6,8 +6,8 @@ const SEARCH_MAX_LEN = 15
 const PLAY_KEY = '__play__'
 const PLAY_MAX_LEN = 200
 
-// const FAVORITE_KEY = '__favorite__'
-// const FAVORITE_MAX_LEN = 200
+const FAVORITE_KEY = '__favorite__'
+const FAVORITE_MAX_LEN = 200
 
 //向localStorage中添加
 function insertArray(arr, val, compare, maxLen) {
@@ -68,4 +68,26 @@ export function savePlay(song) {
 
 export function loadPlay () {
   return storage.get(PLAY_KEY, [])
+}
+
+export function saveFavorite(song) {
+  let songs = storage.get(FAVORITE_KEY, [])
+  insertArray(songs, song, (item)=> {
+    return item.id === song.id
+  },FAVORITE_MAX_LEN)
+  storage.set(FAVORITE_KEY, songs)
+  return songs
+}
+
+export function deleteFavorite (song) {
+  let songs = storage.get(FAVORITE_KEY, [])
+  deleteArray(songs, (item)=> {
+    return item.id === song.id
+  })
+  storage.set(FAVORITE_KEY, songs)
+  return songs
+}
+
+export function loadFavorite() {
+  return storage.get(FAVORITE_KEY, [])
 }

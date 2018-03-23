@@ -1,7 +1,7 @@
 import * as types from './mutation-types'
 import {playMode} from '../common/js/config'
 import {shuffle} from '../common/js/utill'
-import {saveSearch,deleteSearch,clearSearch, savePlay } from '../common/js/cache'
+import {saveSearch,deleteSearch,clearSearch, savePlay, saveFavorite, deleteFavorite } from '../common/js/cache'
 
 function checkAdult(item,song) {
   while(id === song.id) {
@@ -131,4 +131,12 @@ export const deleteSongList = function ({commit}){
 export const savePlayHistory=function({commit}, song){
    const playHistory = savePlay(song)
    commit(types.SET_PLAY_HISTORY, playHistory)
+}
+
+export const saveFavoriteHistory=function ({commit}, song) {
+  commit(types.SET_FAVORITE_LIST, saveFavorite(song))
+}
+
+export const deleteFavoriteHistory=function({commit}, song) {
+  commit(types.SET_FAVORITE_LIST, deleteFavorite(song))
 }

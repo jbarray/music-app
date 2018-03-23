@@ -16,7 +16,7 @@
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
               <span class="like">
-                <i class="icon-not-favorite"></i>
+                <i :class="isFavorite(item)" @click="changeFavoriteMode(item)"></i>
               </span>
               <span  class="delete" @click.stop="deleteOne(item)">
               </span>
