@@ -6,7 +6,7 @@ import Singer from '../components/singer/singer.vue'
 import Recommend from '../components/recommend/recommend.vue'
 import singerDetail from '../components/singer-detail/singer-detail.vue'
 import TopList from '../components/top-list/top-list.vue'
-
+import user from '../components/user-center/user-center.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -45,6 +45,10 @@ export default new Router({
     {
       path: '/recommend',
       component: Recommend
+    },
+    {
+      path: '/user',
+      component: user
     },
   ]
 })
