@@ -118,6 +118,8 @@ export const deleteSong = function ({commit, state}, item) {
   //如果全部删完,设置播放状态为暂停
   if(!playlist.length) {
     commit(types.SET_PLAYING_STATE, false)
+  }else{
+    commit(types.SET_PLAYING_STATE, true)
   }
 }
 

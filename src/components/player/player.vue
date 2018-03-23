@@ -23,83 +23,84 @@
                 <img class="image" :src="currentSong.image">
               </div>
             </div>
-            <div class="playing-lyric-wrapper">
-              <div class="playing-lyric"></div>
-            </div>
           </div>
           <div class="middle-r" ref="middleR"  v-show="!pictureShow" @click="changeLyric">
-            <div class="lyric-wrapper">
-              <div >
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
-                <p class="text" ref="lyricLine">歌词1行</p>
+            <transition name="lyric">
+              <div class="lyric-wrapper">
+                <div >
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                  <p class="text" ref="lyricLine">歌词1行</p>
+                </div>
               </div>
-            </div>
+            </transition>
           </div>
         </div>
         <div class="bottom">
+          <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
               <progress-bar :percent="percent" @percentChange="percentMove"></progress-bar>
             </div>
             <span class="time time-r">{{format(currentSong.duration)}}</span>
+          </div>
           <!--</div>-->
           <div class="operators">
             <div class="icon i-left" @click="changeMode">
@@ -233,10 +234,9 @@ import {playerMixin} from '../../common/js/mixin'
         this.setCurrentIndex(index)
         this.songPlay=false
         //if当前状态没有播放的话,进行播放
-//        if(!this.playing){
-//          this.togglePlaying()
-//        }
-//        console.log(this.playing)
+        if(this.playing === false){
+          this.setPlayingState(true)
+        }
       },
       next() {
         if(!this.songPlay) {
@@ -249,8 +249,8 @@ import {playerMixin} from '../../common/js/mixin'
         this.setCurrentIndex(index)
         this.songPlay=false
         //if当前状态没有播放的话,进行播放
-        if(!this.playing){
-          this.togglePlaying()
+        if(this.playing === false){
+          this.setPlayingState(true)
         }
       },
       // 点击播放按钮 改变播放状态
@@ -463,6 +463,8 @@ import {playerMixin} from '../../common/js/mixin'
             margin: 0 auto
             overflow: hidden
             text-align: center
+            &.lyric-enter-active, &.lyric-leave-active
+              transition: all 0.4s
             .text
               line-height: 32px
               color: $color-text-l
@@ -505,6 +507,7 @@ import {playerMixin} from '../../common/js/mixin'
             &.time-r
               text-align: right
           .progress-bar-wrapper
+            display inline-block
             flex: 1
         .operators
           display: flex
