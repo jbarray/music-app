@@ -85,10 +85,8 @@ export default {
     },
     //  mini播放的显示
     handlePlaylist (playlist) {
-      console.log('length'+playlist.length)
       //  是否显示
       const bottom = playlist.length > 0 ? '60px' : ''
-      console.log(bottom)
 
       //  搜索结果页面和 热门搜索+搜索历史 页面 底部位置
       this.$refs.searchResult.style.bottom = bottom

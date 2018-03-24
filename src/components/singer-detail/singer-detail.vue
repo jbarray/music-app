@@ -51,13 +51,11 @@
             this.songs = this._normalizeSongs(res.data.list)
           }
         })
-        console.log(this.songs)
       },
       //整理获取的jsonp数据
       _normalizeSongs(list) {
         let ret=[]
         let p
-//        console.log(this.keyList)
 //        res.data.list.forEach((item,index) => {
 //          getSongDetail(item.musicData.songmid).then((resp) => {
 //            if(resp.code === 0) {
