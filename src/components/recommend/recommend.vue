@@ -17,7 +17,7 @@
          <div class="recommend-list">
            <h1 class="list-title">热门推荐</h1>
            <ul>
-             <li @click="selectItem(item)" v-for="item in discList" class="item">
+             <li  v-for="item in discList" class="item">
                <div class="icon">
                  <img v-lazy="item.imgurl" width="60" height="60">
                </div>

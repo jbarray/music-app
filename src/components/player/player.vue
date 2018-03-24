@@ -18,11 +18,13 @@
         </div>
         <div class="middle">
           <div class="middle-l" ref="middleL" v-show="pictureShow" @click="changeLyric">
-            <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd" :class="cdCls">
-                <img class="image" :src="currentSong.image">
+            <transition name="cdStyle">
+              <div class="cd-wrapper" ref="cdWrapper">
+                <div class="cd" :class="cdCls">
+                  <img class="image" :src="currentSong.image">
+                </div>
               </div>
-            </div>
+            </transition>
           </div>
           <div class="middle-r" ref="middleR"  v-show="!pictureShow" @click="changeLyric">
             <transition name="lyric">
@@ -424,6 +426,10 @@ import {playerMixin} from '../../common/js/mixin'
             top: 0
             width: 80%
             height: 100%
+            &.cdStyle-enter-active, &.cdStyle-leave-active
+              transition: all 0.4s
+            &.cdStyle-enter, &.cdStyle-leave-to
+              opacity: 0
             .cd
               width: 100%
               height: 100%
