@@ -2,20 +2,26 @@
 
 > 音乐播放器
 
-## Build Setup
+## 使用技术
 
-``` bash
-# install dependencies
-npm install
+HTML + CSS3 + Vue + vue-router + vuex + axios + vue-cli + mixins
 
-# serve with hot reload at localhost:8080
-npm run dev
+## 使用工具
 
-# build for production with minification
-npm run build
+webpack + npm + stylus
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 解决问题
+1.利用vue-router单页面跳转功能,将结构划分成5个部分:推荐,歌手,热门,搜索,用户中心<br/>
+2.利用axios获取qq音乐的后端数据及歌曲,进行整理后作为数据渲染.<br/>
+3.vuex使所有组件可以共享数据,免去组件间的传递;使用mixins,将多组件间出现的重复代码进行统一管理,提高效率<br/>
+4.用户标记数据存储到cookie中.<br/>
+5.webpack负责转换编译,打包<br/>
+
+## 实现功能
+5个部分分别实现不同功能:<br/>
+  推荐页:显示推荐内容,随时更新<br/>
+  歌手列表页:根据歌手,显示歌手所有歌曲,可听<br/>
+  热门页:显示热门专题<br/>
+  搜索页:记录搜索历史和最热搜索<br/>
+  用户中心:记录用户热爱,最近搜索等信息<br/>
