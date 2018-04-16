@@ -9,7 +9,7 @@
             <span class="clear"  @click="confirmShow"><i class="icon-clear"></i></span>
           </h1>
         </div>
-        <Scroll :data="sequenceList" ref="listContent" class="list-content" :refreshDelay="refreshDelay">
+        <scroll :data="sequenceList" ref="listContent" class="list-content" :refreshDelay="refreshDelay">
           <transition-group name="list" tag="ul">
             <li :key="item.id" class="item" v-for="(item,index) in sequenceList" @click="changeCurrentIndex(item, index)" ref="list">
                 <!--@click="selectItem(item,index)">-->
@@ -23,7 +23,7 @@
                 <i class="icon-delete"></i>
             </li>
           </transition-group>
-        </Scroll>
+        </scroll>
         <div class="list-operate">
           <div class="add" @click="showAddSong">
             <i class="icon-add"></i>
@@ -61,17 +61,15 @@
         return this.mode === playMode.sequence? '顺序播放' : this.mode === playMode.random? '随机播放': '单曲循环'
       }
     },
-    created() {
-      this.scrollToCurrentSong(this.currentSong);
-    },
     watch:{
       // 当前播放歌曲发生改变时,当前歌曲置顶
       currentSong(newSong, oldSong){
         if( !this.showFlag || newSong === oldSong) {
           return
-        }else{
-          this.scrollToCurrentSong(newSong)
         }
+        setTimeout(() => {
+          this.scrollToCurrentSong(newSong)
+        }, 20)
       }
     },
     methods: {
@@ -108,6 +106,9 @@
 
       // 当前播放歌曲位于列表最顶部
       scrollToCurrentSong(item) {
+        if(item === null){
+          return
+        }
         const index = this.sequenceList.findIndex((song) => {
           return item.id === song.id
         })
@@ -141,7 +142,7 @@
 
     },
     components: {
-      Scroll,
+      scroll:Scroll,
       Confirm,
       AddSong
     }
